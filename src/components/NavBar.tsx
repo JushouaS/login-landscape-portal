@@ -5,7 +5,7 @@ import { UserCircle, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 interface NavBarProps {
-  userType?: "buyer" | "user" | "middleman" | "admin";
+  userType?: "buyer" | "seller" | "middleman" | "admin";
 }
 
 export function NavBar({ userType }: NavBarProps) {
@@ -20,7 +20,7 @@ export function NavBar({ userType }: NavBarProps) {
     switch (userType) {
       case "buyer":
         return "bg-blue-50 border-blue-100";
-      case "user":
+      case "seller":
         return "bg-green-50 border-green-100";
       case "middleman":
         return "bg-purple-50 border-purple-100";

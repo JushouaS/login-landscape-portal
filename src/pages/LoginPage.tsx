@@ -10,7 +10,7 @@ const LoginPage = () => {
   
   useEffect(() => {
     // Validate role parameter
-    if (role && !["buyer", "user", "middleman", "admin"].includes(role)) {
+    if (role && !["buyer", "seller", "middleman", "admin"].includes(role)) {
       navigate("/");
     }
   }, [role, navigate]);
@@ -26,8 +26,8 @@ const LoginPage = () => {
             <Link to="/login/buyer" className="block p-4 border rounded-md hover:bg-blue-50 transition-colors">
               Buyer Login
             </Link>
-            <Link to="/login/user" className="block p-4 border rounded-md hover:bg-green-50 transition-colors">
-              User Login
+            <Link to="/login/seller" className="block p-4 border rounded-md hover:bg-green-50 transition-colors">
+              Seller Login
             </Link>
             <Link to="/login/middleman" className="block p-4 border rounded-md hover:bg-purple-50 transition-colors">
               Middleman Login
@@ -48,7 +48,7 @@ const LoginPage = () => {
       title={`${formattedRole} Login`} 
       subtitle={`Welcome back! Login to access your ${role} dashboard.`}
     >
-      <AuthForm type="login" role={role as "buyer" | "user" | "middleman" | "admin"} />
+      <AuthForm type="login" role={role as "buyer" | "seller" | "middleman" | "admin"} />
       <p className="text-center text-sm">
         Don't have an account?{" "}
         <Link to={`/signup/${role}`} className="text-primary hover:underline">

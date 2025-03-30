@@ -8,7 +8,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import BuyerDashboard from "./pages/dashboards/BuyerDashboard";
-import UserDashboard from "./pages/dashboards/UserDashboard";
+import SellerDashboard from "./pages/dashboards/SellerDashboard";
 import MiddlemanDashboard from "./pages/dashboards/MiddlemanDashboard";
 import AdminDashboard from "./pages/dashboards/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -32,7 +32,7 @@ const App = () => (
           
           {/* Dashboard Routes */}
           <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
-          <Route path="/dashboard/user" element={<UserDashboard />} />
+          <Route path="/dashboard/seller" element={<SellerDashboard />} />
           <Route path="/dashboard/middleman" element={<MiddlemanDashboard />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
           

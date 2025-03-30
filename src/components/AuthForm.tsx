@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 interface AuthFormProps {
   type: "login" | "signup";
-  role: "buyer" | "user" | "middleman" | "admin";
+  role: "buyer" | "seller" | "middleman" | "admin";
 }
 
 export function AuthForm({ type, role }: AuthFormProps) {

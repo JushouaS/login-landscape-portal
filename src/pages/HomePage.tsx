@@ -20,11 +20,11 @@ const HomePage = () => {
       path: "/login/buyer"
     },
     {
-      title: "User",
-      description: "Regular users can manage their accounts and preferences",
+      title: "Seller",
+      description: "Sellers can list and manage their products for sale",
       icon: <Users className="h-10 w-10 text-green-500" />,
-      className: "role-card user",
-      path: "/login/user"
+      className: "role-card seller",
+      path: "/login/seller"
     },
     {
       title: "Middleman",

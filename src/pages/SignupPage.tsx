@@ -10,7 +10,7 @@ const SignupPage = () => {
   
   useEffect(() => {
     // Validate role parameter
-    if (role && !["buyer", "user", "middleman", "admin"].includes(role)) {
+    if (role && !["buyer", "seller", "middleman", "admin"].includes(role)) {
       navigate("/");
     }
   }, [role, navigate]);
@@ -26,8 +26,8 @@ const SignupPage = () => {
             <Link to="/signup/buyer" className="block p-4 border rounded-md hover:bg-blue-50 transition-colors">
               Buyer Registration
             </Link>
-            <Link to="/signup/user" className="block p-4 border rounded-md hover:bg-green-50 transition-colors">
-              User Registration
+            <Link to="/signup/seller" className="block p-4 border rounded-md hover:bg-green-50 transition-colors">
+              Seller Registration
             </Link>
             <Link to="/signup/middleman" className="block p-4 border rounded-md hover:bg-purple-50 transition-colors">
               Middleman Registration
@@ -48,7 +48,7 @@ const SignupPage = () => {
       title={`${formattedRole} Registration`} 
       subtitle={`Create your ${role} account to get started.`}
     >
-      <AuthForm type="signup" role={role as "buyer" | "user" | "middleman" | "admin"} />
+      <AuthForm type="signup" role={role as "buyer" | "seller" | "middleman" | "admin"} />
       <p className="text-center text-sm">
         Already have an account?{" "}
         <Link to={`/login/${role}`} className="text-primary hover:underline">
