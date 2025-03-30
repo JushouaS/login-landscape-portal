@@ -1,0 +1,62 @@
+
+import { NavBar } from "@/components/NavBar";
+import { Card } from "@/components/ui/card";
+import { UserCheck, BarChart, Calendar, Users } from "lucide-react";
+
+const MiddlemanDashboard = () => {
+  const dashboardCards = [
+    {
+      title: "Active Transactions",
+      description: "Manage ongoing transactions",
+      icon: <UserCheck className="h-10 w-10 text-purple-500" />,
+    },
+    {
+      title: "Transaction History",
+      description: "View past transaction records",
+      icon: <BarChart className="h-10 w-10 text-purple-500" />,
+    },
+    {
+      title: "Schedule",
+      description: "Manage your appointments and meetings",
+      icon: <Calendar className="h-10 w-10 text-purple-500" />,
+    },
+    {
+      title: "Clients",
+      description: "View and manage your client list",
+      icon: <Users className="h-10 w-10 text-purple-500" />,
+    },
+  ];
+
+  return (
+    <div className="page-container">
+      <NavBar userType="middleman" />
+      <main className="flex-1 bg-purple-50">
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold mb-8">Middleman Dashboard</h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {dashboardCards.map((card, index) => (
+              <Card key={index} className="dashboard-card hover:border-purple-300">
+                <div className="flex flex-col items-center text-center gap-4">
+                  {card.icon}
+                  <h2 className="text-xl font-semibold">{card.title}</h2>
+                  <p className="text-gray-600 text-sm">{card.description}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+          
+          <h2 className="text-2xl font-bold mb-4">Recent Transactions</h2>
+          <Card className="p-6">
+            <p className="text-gray-500 text-center py-8">No recent transactions</p>
+          </Card>
+        </div>
+      </main>
+      <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
+        &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
+      </footer>
+    </div>
+  );
+};
+
+export default MiddlemanDashboard;
