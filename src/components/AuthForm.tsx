@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 interface AuthFormProps {
@@ -17,10 +17,18 @@ export function AuthForm({ type, role }: AuthFormProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [idDocument, setIdDocument] = useState<File | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
   const navigate = useNavigate();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setIdDocument(e.target.files[0]);
+      toast.success(`File "${e.target.files[0].name}" uploaded successfully`);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +50,13 @@ export function AuthForm({ type, role }: AuthFormProps) {
       
       if (password.length < 6) {
         toast.error("Password must be at least 6 characters");
+        setIsLoading(false);
+        return;
+      }
+
+      // Check for ID document requirement for middleman and admin
+      if ((role === "middleman" || role === "admin") && !idDocument && type === "signup") {
+        toast.error(`Valid ID document is required for ${role} registration`);
         setIsLoading(false);
         return;
       }
@@ -122,19 +137,55 @@ export function AuthForm({ type, role }: AuthFormProps) {
       </div>
       
       {type === "signup" && (
-        <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <div className="relative">
-            <Input
-              id="confirmPassword"
-              type={showPassword ? "text" : "password"}
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+        <>
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showPassword ? "text" : "password"}
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
           </div>
-        </div>
+
+          {(role === "middleman" || role === "admin") && (
+            <div className="space-y-2">
+              <Label htmlFor="idDocument">Valid ID Document</Label>
+              <div className="border border-input rounded-md p-2">
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => document.getElementById("idDocument")?.click()}
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    {idDocument ? 'Change File' : 'Upload ID'}
+                  </Button>
+                  {idDocument && (
+                    <span className="text-xs text-gray-500 truncate max-w-[150px]">
+                      {idDocument.name}
+                    </span>
+                  )}
+                </div>
+                <Input
+                  id="idDocument"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Please upload a valid government-issued ID (passport, driver's license, national ID card)
+                </p>
+              </div>
+            </div>
+          )}
+        </>
       )}
       
       <Button
