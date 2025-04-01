@@ -2,6 +2,7 @@
 import { NavBar } from "@/components/NavBar";
 import { Card } from "@/components/ui/card";
 import { ShoppingBag, Package, CreditCard, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const BuyerDashboard = () => {
   const dashboardCards = [
@@ -9,21 +10,25 @@ const BuyerDashboard = () => {
       title: "Browse Products",
       description: "Explore our catalog of products",
       icon: <ShoppingBag className="h-10 w-10 text-blue-500" />,
+      link: "/dashboard/buyer/products"
     },
     {
       title: "My Orders",
       description: "Track and manage your orders",
       icon: <Package className="h-10 w-10 text-blue-500" />,
+      link: "/dashboard/buyer/orders"
     },
     {
       title: "Payment Methods",
       description: "Manage your payment information",
       icon: <CreditCard className="h-10 w-10 text-blue-500" />,
+      link: "/dashboard/buyer/payment-methods"
     },
     {
       title: "Wishlist",
       description: "View and manage your saved items",
       icon: <Heart className="h-10 w-10 text-blue-500" />,
+      link: "/dashboard/buyer/wishlist"
     },
   ];
 
@@ -36,13 +41,15 @@ const BuyerDashboard = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {dashboardCards.map((card, index) => (
-              <Card key={index} className="dashboard-card hover:border-blue-300">
-                <div className="flex flex-col items-center text-center gap-4">
-                  {card.icon}
-                  <h2 className="text-xl font-semibold">{card.title}</h2>
-                  <p className="text-gray-600 text-sm">{card.description}</p>
-                </div>
-              </Card>
+              <Link to={card.link} key={index}>
+                <Card className="dashboard-card hover:border-blue-300 transition-all hover:shadow-md cursor-pointer">
+                  <div className="flex flex-col items-center text-center gap-4 p-6">
+                    {card.icon}
+                    <h2 className="text-xl font-semibold">{card.title}</h2>
+                    <p className="text-gray-600 text-sm">{card.description}</p>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
           

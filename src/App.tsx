@@ -13,6 +13,9 @@ import MiddlemanDashboard from "./pages/dashboards/MiddlemanDashboard";
 import AdminDashboard from "./pages/dashboards/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
+// Buyer Pages
+import PaymentMethodsPage from "./pages/buyer/PaymentMethodsPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -35,6 +38,9 @@ const App = () => (
           <Route path="/dashboard/seller" element={<SellerDashboard />} />
           <Route path="/dashboard/middleman" element={<MiddlemanDashboard />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
+          
+          {/* Buyer Feature Routes */}
+          <Route path="/dashboard/buyer/payment-methods" element={<PaymentMethodsPage />} />
           
           {/* Catch-all Route */}
           <Route path="*" element={<NotFound />} />
