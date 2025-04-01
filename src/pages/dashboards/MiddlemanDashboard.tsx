@@ -2,6 +2,7 @@
 import { NavBar } from "@/components/NavBar";
 import { Card } from "@/components/ui/card";
 import { UserCheck, BarChart, Calendar, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const MiddlemanDashboard = () => {
   const dashboardCards = [
@@ -9,21 +10,25 @@ const MiddlemanDashboard = () => {
       title: "Active Transactions",
       description: "Manage ongoing transactions",
       icon: <UserCheck className="h-10 w-10 text-purple-500" />,
+      link: "/dashboard/middleman/transactions"
     },
     {
       title: "Transaction History",
       description: "View past transaction records",
       icon: <BarChart className="h-10 w-10 text-purple-500" />,
+      link: "/dashboard/middleman/history"
     },
     {
       title: "Schedule",
       description: "Manage your appointments and meetings",
       icon: <Calendar className="h-10 w-10 text-purple-500" />,
+      link: "/dashboard/middleman/schedule"
     },
     {
       title: "Clients",
       description: "View and manage your client list",
       icon: <Users className="h-10 w-10 text-purple-500" />,
+      link: "/dashboard/middleman/clients"
     },
   ];
 
@@ -36,13 +41,15 @@ const MiddlemanDashboard = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {dashboardCards.map((card, index) => (
-              <Card key={index} className="dashboard-card hover:border-purple-300">
-                <div className="flex flex-col items-center text-center gap-4">
-                  {card.icon}
-                  <h2 className="text-xl font-semibold">{card.title}</h2>
-                  <p className="text-gray-600 text-sm">{card.description}</p>
-                </div>
-              </Card>
+              <Link to={card.link} key={index}>
+                <Card className="dashboard-card hover:border-purple-300 transition-all hover:shadow-md cursor-pointer">
+                  <div className="flex flex-col items-center text-center gap-4 p-6">
+                    {card.icon}
+                    <h2 className="text-xl font-semibold">{card.title}</h2>
+                    <p className="text-gray-600 text-sm">{card.description}</p>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
           
