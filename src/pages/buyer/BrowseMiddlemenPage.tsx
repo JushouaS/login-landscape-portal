@@ -21,6 +21,21 @@ interface Middleman {
   successRate: string;
 }
 
+// Moved renderRatingStars function outside the components to make it accessible to both
+const renderRatingStars = (rating: number) => {
+  return (
+    <div className="flex items-center">
+      {[...Array(5)].map((_, i) => (
+        <Star 
+          key={i} 
+          className={`h-4 w-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
+        />
+      ))}
+      <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+    </div>
+  );
+};
+
 const BrowseMiddlemenPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -98,19 +113,7 @@ const BrowseMiddlemenPage = () => {
     middleman.expertise.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const renderRatingStars = (rating: number) => {
-    return (
-      <div className="flex items-center">
-        {[...Array(5)].map((_, i) => (
-          <Star 
-            key={i} 
-            className={`h-4 w-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
-          />
-        ))}
-        <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
-      </div>
-    );
-  };
+  // Removed renderRatingStars from here since it's now defined globally
 
   return (
     <div className="page-container">
