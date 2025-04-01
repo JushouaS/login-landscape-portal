@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -54,34 +53,35 @@ const OverviewPage = () => {
 
   const COLORS = ['#3b82f6', '#10b981', '#a855f7', '#ef4444'];
 
-  // Data for system alerts
+  // Data for system alerts with properly typed status
   const systemAlerts = [
     {
       id: '1',
       title: 'Server Performance',
-      status: 'normal',
+      status: 'normal' as const,
       message: 'All systems operating normally'
     },
     {
       id: '2',
       title: 'Database Backup',
-      status: 'warning',
+      status: 'warning' as const,
       message: 'Last backup completed 48 hours ago'
     },
     {
       id: '3',
       title: 'Payment Gateway',
-      status: 'normal',
+      status: 'normal' as const,
       message: 'Processing transactions normally'
     },
     {
       id: '4',
       title: 'Security Scan',
-      status: 'critical',
+      status: 'critical' as const,
       message: 'Scheduled security scan skipped'
     }
   ];
 
+  // Properly typed function for alert status icons
   const getAlertStatusIcon = (status: 'normal' | 'warning' | 'critical') => {
     switch (status) {
       case 'normal':

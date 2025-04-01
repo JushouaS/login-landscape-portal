@@ -3,11 +3,12 @@ import React from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BarChart, ArrowLeft, TrendingUp, TrendingDown, DollarSign, ShoppingBag } from "lucide-react";
+import { ArrowLeft, TrendingUp, TrendingDown, DollarSign, ShoppingBag } from "lucide-react";
+import { BarChart as LucideBarChart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { 
-  BarChart as RechartsBarChart, 
+  BarChart, 
   Bar, 
   XAxis, 
   YAxis, 
@@ -86,7 +87,7 @@ const AnalyticsPage = () => {
               value="$66.77" 
               change="-3.8%" 
               trend="down" 
-              icon={<BarChart className="h-8 w-8 text-green-600" />}
+              icon={<LucideBarChart className="h-8 w-8 text-green-600" />}
             />
             <StatCard 
               title="Conversion Rate" 

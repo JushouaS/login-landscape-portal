@@ -1,9 +1,21 @@
-
 import React from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Settings, ArrowLeft, Save, Trash2, Lock, Bell, Globe, Mail, Database, Server } from "lucide-react";
+import { 
+  Settings, 
+  ArrowLeft, 
+  Save, 
+  Trash2, 
+  Lock, 
+  Bell, 
+  Globe, 
+  Mail, 
+  Database, 
+  Server, 
+  Shield, 
+  CreditCard 
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
