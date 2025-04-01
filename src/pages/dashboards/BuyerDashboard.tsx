@@ -1,16 +1,16 @@
 
 import { NavBar } from "@/components/NavBar";
 import { Card } from "@/components/ui/card";
-import { ShoppingBag, Package, CreditCard, Heart } from "lucide-react";
+import { ShoppingBag, Package, CreditCard, Heart, UserCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const BuyerDashboard = () => {
   const dashboardCards = [
     {
-      title: "Browse Products",
-      description: "Explore our catalog of products",
-      icon: <ShoppingBag className="h-10 w-10 text-blue-500" />,
-      link: "/dashboard/buyer/products"
+      title: "Browse Middlemen",
+      description: "Find trusted middlemen for your transactions",
+      icon: <UserCheck className="h-10 w-10 text-blue-500" />,
+      link: "/dashboard/buyer/middlemen"
     },
     {
       title: "My Orders",

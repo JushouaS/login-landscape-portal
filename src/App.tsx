@@ -15,7 +15,7 @@ import NotFound from "./pages/NotFound";
 
 // Buyer Pages
 import PaymentMethodsPage from "./pages/buyer/PaymentMethodsPage";
-import BrowseProductsPage from "./pages/buyer/BrowseProductsPage";
+import BrowseMiddlemenPage from "./pages/buyer/BrowseMiddlemenPage";
 import OrdersPage from "./pages/buyer/OrdersPage";
 import WishlistPage from "./pages/buyer/WishlistPage";
 
@@ -62,7 +62,7 @@ const App = () => (
           
           {/* Buyer Feature Routes */}
           <Route path="/dashboard/buyer/payment-methods" element={<PaymentMethodsPage />} />
-          <Route path="/dashboard/buyer/products" element={<BrowseProductsPage />} />
+          <Route path="/dashboard/buyer/middlemen" element={<BrowseMiddlemenPage />} />
           <Route path="/dashboard/buyer/orders" element={<OrdersPage />} />
           <Route path="/dashboard/buyer/wishlist" element={<WishlistPage />} />
           
