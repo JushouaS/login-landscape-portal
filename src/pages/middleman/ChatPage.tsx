@@ -3,20 +3,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search, Send, Phone, Camera, Image, Smile, Paperclip, MoreVertical } from "lucide-react";
+import { Search, Send, Phone, Image, Paperclip } from "lucide-react";
 import { ChatContact, ChatMessage } from "@/types/middleman";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ChatPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [selectedContact, setSelectedContact] = useState<ChatContact | null>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  
+  const params = new URLSearchParams(location.search);
+  const clientId = params.get('client');
   
   const [contacts, setContacts] = useState<ChatContact[]>([
     {
@@ -32,15 +36,41 @@ const ChatPage = () => {
       avatar: "",
       lastMessage: "Hi!",
       type: "seller"
+    },
+    {
+      id: "3",
+      name: "Maria Rodriguez",
+      avatar: "",
+      lastMessage: "Hello, I'm interested in your service",
+      type: "buyer"
+    },
+    {
+      id: "4",
+      name: "Tech Gadgets Shop",
+      avatar: "",
+      lastMessage: "When can we proceed with the transaction?",
+      type: "seller"
     }
   ]);
   
   const [messages, setMessages] = useState<Record<string, ChatMessage[]>>({
     "1": [
       { id: "m1", sender: "Alex Gwapa", senderType: "buyer", content: "Hi!", timestamp: new Date(Date.now() - 3600000) },
+      { id: "m2", sender: "Me", senderType: "middleman", content: "Hello Alex! How can I help you today?", timestamp: new Date(Date.now() - 3500000) },
+      { id: "m3", sender: "Alex Gwapa", senderType: "buyer", content: "I'm interested in purchasing a laptop from Tech Shop but want to ensure it's legitimate.", timestamp: new Date(Date.now() - 3400000) },
     ],
     "2": [
-      { id: "m2", sender: "Jushoua Oswald G. Santos", senderType: "seller", content: "Hi!", timestamp: new Date(Date.now() - 7200000) },
+      { id: "m4", sender: "Jushoua Oswald G. Santos", senderType: "seller", content: "Hi! I have some products I'd like to sell through your platform.", timestamp: new Date(Date.now() - 7200000) },
+      { id: "m5", sender: "Me", senderType: "middleman", content: "Hello Jushoua! That's great. Could you provide details about the products?", timestamp: new Date(Date.now() - 7100000) },
+      { id: "m6", sender: "Jushoua Oswald G. Santos", senderType: "seller", content: "Sure, I have several electronics items including smartphones and tablets.", timestamp: new Date(Date.now() - 7000000) },
+    ],
+    "3": [
+      { id: "m7", sender: "Maria Rodriguez", senderType: "buyer", content: "Hello, I'm interested in your service", timestamp: new Date(Date.now() - 10200000) },
+      { id: "m8", sender: "Me", senderType: "middleman", content: "Hi Maria! Welcome to Sellmate. How may I assist you today?", timestamp: new Date(Date.now() - 10100000) },
+    ],
+    "4": [
+      { id: "m9", sender: "Tech Gadgets Shop", senderType: "seller", content: "When can we proceed with the transaction?", timestamp: new Date(Date.now() - 86400000) },
+      { id: "m10", sender: "Me", senderType: "middleman", content: "I'm just waiting for confirmation from the buyer. Should be ready by tomorrow.", timestamp: new Date(Date.now() - 82800000) },
     ]
   });
 
@@ -52,6 +82,16 @@ const ChatPage = () => {
     profession: "Programmer, Developer",
     avatar: "/lovable-uploads/a0248aef-fed3-4b14-b572-2feb6e9ffa76.png"
   };
+
+  // Set the selected contact based on the clientId from URL or default to the first contact
+  useEffect(() => {
+    if (clientId) {
+      const contact = contacts.find(c => c.id === clientId);
+      if (contact) {
+        setSelectedContact(contact);
+      }
+    }
+  }, [clientId, contacts]);
 
   useEffect(() => {
     if (messageEndRef.current) {
@@ -102,27 +142,42 @@ const ChatPage = () => {
   return (
     <div className="page-container">
       <NavBar userType="middleman" />
-      <main className="flex-1 bg-purple-50">
+      <main className="flex-1 bg-gradient-to-br from-green-50 to-blue-50">
         <div className="container mx-auto p-0 md:p-4 h-[calc(100vh-8rem)] flex">
-          <Card className="w-full h-full overflow-hidden border-2 border-purple-100 shadow-xl flex flex-col md:flex-row">
+          <Card className="w-full h-full overflow-hidden border-green-200 shadow-xl flex flex-col md:flex-row">
             {/* Contacts List */}
-            <div className="w-full md:w-1/4 border-r border-purple-100 flex flex-col">
-              <div className="p-4 border-b border-purple-100 bg-white">
-                <h2 className="text-xl font-bold mb-4">Chats</h2>
+            <div className="w-full md:w-1/4 border-r border-green-100 flex flex-col bg-white">
+              <div className="p-4 border-b border-green-100 bg-white">
+                <h2 className="text-xl font-bold mb-4 text-green-800">Chats</h2>
                 <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input 
-                    className="pl-9" 
+                    className="pl-9 border-green-200 focus:border-green-400 focus:ring focus:ring-green-200" 
                     placeholder="Search or Start new chat" 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid grid-cols-3 bg-purple-100">
-                    <TabsTrigger value="all" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">All</TabsTrigger>
-                    <TabsTrigger value="seller" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">Seller</TabsTrigger>
-                    <TabsTrigger value="buyer" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">Buyer</TabsTrigger>
+                <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid grid-cols-3 bg-green-100 w-full">
+                    <TabsTrigger 
+                      value="all" 
+                      className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+                    >
+                      All
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="seller" 
+                      className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+                    >
+                      Seller
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="buyer" 
+                      className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+                    >
+                      Buyer
+                    </TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
@@ -131,12 +186,12 @@ const ChatPage = () => {
                   filteredContacts.map((contact) => (
                     <div 
                       key={contact.id} 
-                      className={`flex items-center p-4 hover:bg-purple-50 cursor-pointer transition-colors border-b border-gray-100 ${selectedContact?.id === contact.id ? 'bg-purple-100' : ''}`}
+                      className={`flex items-center p-4 hover:bg-green-50 cursor-pointer transition-colors border-b border-gray-100 ${selectedContact?.id === contact.id ? 'bg-green-100' : ''}`}
                       onClick={() => setSelectedContact(contact)}
                     >
                       <Avatar className="h-12 w-12 mr-4">
                         <AvatarImage src={contact.avatar} />
-                        <AvatarFallback className="bg-purple-200 text-purple-700">
+                        <AvatarFallback className="bg-green-200 text-green-700">
                           {contact.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
@@ -150,7 +205,9 @@ const ChatPage = () => {
                           </span>
                         </div>
                         <p className="text-sm text-gray-500 truncate">{contact.lastMessage}</p>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 capitalize">{contact.type}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${contact.type === 'buyer' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'} capitalize`}>
+                          {contact.type}
+                        </span>
                       </div>
                     </div>
                   ))
@@ -167,42 +224,40 @@ const ChatPage = () => {
               {selectedContact ? (
                 <>
                   {/* Chat Header */}
-                  <div className="p-4 border-b border-purple-100 bg-white flex justify-between items-center">
+                  <div className="p-4 border-b border-green-100 bg-white flex justify-between items-center">
                     <div className="flex items-center">
                       <Avatar className="h-10 w-10 mr-3">
                         <AvatarImage src={selectedContact.avatar} />
-                        <AvatarFallback className="bg-purple-200 text-purple-700">
+                        <AvatarFallback className="bg-green-200 text-green-700">
                           {selectedContact.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-semibold">{selectedContact.name}</h3>
+                        <h3 className="font-semibold text-green-800">{selectedContact.name}</h3>
                         <p className="text-xs text-gray-500 capitalize">{selectedContact.type}</p>
                       </div>
                     </div>
                     <div className="flex space-x-2">
-                      <Button size="icon" variant="ghost">
+                      <Button 
+                        size="icon" 
+                        variant="ghost"
+                        className="text-green-600 hover:bg-green-50 hover:text-green-700"
+                      >
                         <Phone className="h-5 w-5" />
-                      </Button>
-                      <Button size="icon" variant="ghost">
-                        <Camera className="h-5 w-5" />
-                      </Button>
-                      <Button size="icon" variant="ghost">
-                        <MoreVertical className="h-5 w-5" />
                       </Button>
                     </div>
                   </div>
 
                   {/* Chat Messages */}
                   <div className="flex-1 overflow-y-auto p-4 bg-green-50/30">
-                    {messages[selectedContact.id]?.map((msg, index) => (
+                    {messages[selectedContact.id]?.map((msg) => (
                       <div 
                         key={msg.id} 
                         className={`flex mb-4 ${msg.senderType === 'middleman' ? 'justify-end' : 'justify-start'}`}
                       >
                         {msg.senderType !== 'middleman' && (
                           <Avatar className="h-8 w-8 mr-2">
-                            <AvatarFallback className="bg-purple-200 text-purple-700">
+                            <AvatarFallback className={`${msg.senderType === 'buyer' ? 'bg-blue-200 text-blue-700' : 'bg-green-200 text-green-700'}`}>
                               {msg.sender[0].toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
@@ -210,7 +265,7 @@ const ChatPage = () => {
                         <div 
                           className={`max-w-[70%] p-3 rounded-2xl ${
                             msg.senderType === 'middleman' 
-                              ? 'bg-purple-500 text-white rounded-tr-none' 
+                              ? 'bg-green-500 text-white rounded-tr-none' 
                               : 'bg-white rounded-tl-none shadow-sm'
                           }`}
                         >
@@ -225,27 +280,32 @@ const ChatPage = () => {
                   </div>
 
                   {/* Message Input */}
-                  <div className="p-3 border-t border-purple-100 bg-white flex items-center">
-                    <Button variant="ghost" size="icon">
+                  <div className="p-3 border-t border-green-100 bg-white flex items-center">
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      className="text-green-600 hover:bg-green-50 hover:text-green-700"
+                    >
                       <Paperclip className="h-5 w-5" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      className="text-green-600 hover:bg-green-50 hover:text-green-700"
+                    >
                       <Image className="h-5 w-5" />
                     </Button>
                     <div className="flex-1 mx-2 relative">
                       <Input 
-                        className="pr-10 focus-visible:ring-purple-500"
-                        placeholder="Type your message..." 
+                        className="pr-10 focus-visible:ring-green-500 border-green-200"
+                        placeholder="type your message" 
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyPress}
                       />
-                      <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2">
-                        <Smile className="h-5 w-5" />
-                      </Button>
                     </div>
                     <Button 
-                      className="bg-purple-500 hover:bg-purple-600 transition-colors"
+                      className="bg-green-500 hover:bg-green-600 transition-colors"
                       size="icon" 
                       onClick={handleSendMessage}
                       disabled={!message.trim()}
@@ -257,12 +317,12 @@ const ChatPage = () => {
               ) : (
                 <div className="flex-1 flex flex-col md:flex-row">
                   {/* Welcome/Empty state */}
-                  <div className="flex-1 flex items-center justify-center bg-purple-50">
+                  <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50">
                     <div className="text-center p-6">
-                      <div className="mb-4 bg-purple-100 p-6 rounded-full inline-block">
-                        <Search className="h-12 w-12 text-purple-500" />
+                      <div className="mb-4 bg-green-100 p-6 rounded-full inline-block">
+                        <Search className="h-12 w-12 text-green-500" />
                       </div>
-                      <h3 className="text-xl font-semibold mb-2">Select a contact</h3>
+                      <h3 className="text-xl font-semibold mb-2 text-green-800">Select a contact</h3>
                       <p className="text-gray-500 max-w-md">
                         Choose a buyer or seller from the list to start chatting and facilitating transactions
                       </p>
@@ -270,14 +330,14 @@ const ChatPage = () => {
                   </div>
                   
                   {/* Middleman profile */}
-                  <div className="w-full md:w-72 border-l border-purple-100 bg-white p-6 flex flex-col items-center">
-                    <Avatar className="h-32 w-32 mb-4">
+                  <div className="w-full md:w-72 border-l border-green-100 bg-white p-6 flex flex-col items-center">
+                    <Avatar className="h-32 w-32 mb-4 border-4 border-green-200">
                       <AvatarImage src={middlemanProfile.avatar} />
-                      <AvatarFallback className="bg-purple-200 text-purple-700 text-3xl">
+                      <AvatarFallback className="bg-green-200 text-green-700 text-3xl">
                         {middlemanProfile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <h3 className="text-lg font-semibold text-center mb-1">{middlemanProfile.name}</h3>
+                    <h3 className="text-lg font-semibold text-center mb-1 text-green-800">{middlemanProfile.name}</h3>
                     <p className="text-sm text-gray-500 mb-4">{middlemanProfile.email}</p>
                     <div className="w-full space-y-3">
                       <div className="bg-green-500 text-white p-3 rounded-md text-center overflow-hidden text-ellipsis">
@@ -290,7 +350,7 @@ const ChatPage = () => {
                         {middlemanProfile.profession}
                       </div>
                     </div>
-                    <Button variant="outline" className="mt-6 w-full border-purple-300">
+                    <Button variant="outline" className="mt-6 w-full border-green-300 text-green-700 hover:bg-green-50">
                       Edit Profile
                     </Button>
                   </div>
@@ -300,15 +360,15 @@ const ChatPage = () => {
             
             {/* Middleman profile sidebar (when chat is active) */}
             {selectedContact && (
-              <div className="hidden lg:block w-72 border-l border-purple-100 bg-white">
+              <div className="hidden lg:block w-72 border-l border-green-100 bg-white">
                 <div className="p-6 flex flex-col items-center">
-                  <Avatar className="h-32 w-32 mb-4">
+                  <Avatar className="h-32 w-32 mb-4 border-4 border-green-200">
                     <AvatarImage src={middlemanProfile.avatar} />
-                    <AvatarFallback className="bg-purple-200 text-purple-700 text-3xl">
+                    <AvatarFallback className="bg-green-200 text-green-700 text-3xl">
                       {middlemanProfile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <h3 className="text-lg font-semibold text-center mb-1">{middlemanProfile.name}</h3>
+                  <h3 className="text-lg font-semibold text-center mb-1 text-green-800">{middlemanProfile.name}</h3>
                   <p className="text-sm text-gray-500 mb-4">{middlemanProfile.email}</p>
                   <div className="w-full space-y-3">
                     <div className="bg-green-500 text-white p-3 rounded-md text-center overflow-hidden text-ellipsis">
@@ -322,8 +382,12 @@ const ChatPage = () => {
                     </div>
                   </div>
                   <div className="mt-6 w-full space-y-3">
-                    <Button className="w-full">Transaction Details</Button>
-                    <Button variant="outline" className="w-full">Close Transaction</Button>
+                    <Button className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 transition-colors">
+                      Transaction Details
+                    </Button>
+                    <Button variant="outline" className="w-full border-green-300 text-green-700 hover:bg-green-50">
+                      Close Transaction
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -331,7 +395,7 @@ const ChatPage = () => {
           </Card>
         </div>
       </main>
-      <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
+      <footer className="bg-gradient-to-r from-green-100 to-blue-100 py-4 text-center text-sm text-gray-600">
         &copy; {new Date().getFullYear()} Sellmate. All rights reserved.
       </footer>
     </div>

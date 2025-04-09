@@ -91,6 +91,15 @@ const ClientsPage = () => {
     navigate('/dashboard/middleman');
   };
 
+  const handleContactClient = (clientId: string) => {
+    navigate(`/dashboard/middleman/chat?client=${clientId}`);
+  };
+
+  const handleViewProfile = (clientId: string) => {
+    // For future implementation
+    console.log(`View profile for client ${clientId}`);
+  };
+
   const filteredClients = clients.filter(client => 
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     client.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -115,7 +124,7 @@ const ClientsPage = () => {
   return (
     <div className="page-container">
       <NavBar userType="middleman" />
-      <main className="flex-1 bg-purple-50">
+      <main className="flex-1 bg-gradient-to-br from-purple-50 to-indigo-50">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
@@ -123,28 +132,30 @@ const ClientsPage = () => {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
-              <h1 className="text-3xl font-bold">Clients</h1>
+              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+                Clients
+              </h1>
             </div>
-            <Button>
+            <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transition-all duration-300">
               <UserPlus className="h-4 w-4 mr-2" />
               Add New Client
             </Button>
           </div>
 
-          <Card className="mb-8">
-            <CardHeader>
+          <Card className="mb-8 overflow-hidden border-purple-200 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                  <CardTitle>Client Directory</CardTitle>
+                  <CardTitle className="text-purple-800">Client Directory</CardTitle>
                   <CardDescription>
                     Manage your buyers and sellers
                   </CardDescription>
                 </div>
                 <div className="relative w-full md:w-72">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-purple-500" />
                   <Input
                     placeholder="Search clients..."
-                    className="pl-8"
+                    className="pl-8 border-purple-200 focus:border-purple-400 focus:ring focus:ring-purple-300"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -153,16 +164,22 @@ const ClientsPage = () => {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="all" className="w-full">
-                <TabsList className="mb-6">
-                  <TabsTrigger value="all">All Clients</TabsTrigger>
-                  <TabsTrigger value="buyers">Buyers</TabsTrigger>
-                  <TabsTrigger value="sellers">Sellers</TabsTrigger>
-                  <TabsTrigger value="active">Active</TabsTrigger>
-                  <TabsTrigger value="inactive">Inactive</TabsTrigger>
+                <TabsList className="mb-6 bg-purple-100">
+                  <TabsTrigger value="all" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">All Clients</TabsTrigger>
+                  <TabsTrigger value="buyers" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">Buyers</TabsTrigger>
+                  <TabsTrigger value="sellers" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">Sellers</TabsTrigger>
+                  <TabsTrigger value="active" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">Active</TabsTrigger>
+                  <TabsTrigger value="inactive" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">Inactive</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="all" className="mt-0">
-                  <ClientsList clients={filteredClients} getStatusBadge={getStatusBadge} getTypeBadge={getTypeBadge} />
+                  <ClientsList 
+                    clients={filteredClients} 
+                    getStatusBadge={getStatusBadge} 
+                    getTypeBadge={getTypeBadge} 
+                    onContact={handleContactClient}
+                    onViewProfile={handleViewProfile}
+                  />
                 </TabsContent>
 
                 <TabsContent value="buyers" className="mt-0">
@@ -170,6 +187,8 @@ const ClientsPage = () => {
                     clients={filteredClients.filter(client => client.type === 'buyer')} 
                     getStatusBadge={getStatusBadge} 
                     getTypeBadge={getTypeBadge} 
+                    onContact={handleContactClient}
+                    onViewProfile={handleViewProfile}
                   />
                 </TabsContent>
 
@@ -178,6 +197,8 @@ const ClientsPage = () => {
                     clients={filteredClients.filter(client => client.type === 'seller')} 
                     getStatusBadge={getStatusBadge} 
                     getTypeBadge={getTypeBadge} 
+                    onContact={handleContactClient}
+                    onViewProfile={handleViewProfile}
                   />
                 </TabsContent>
 
@@ -186,6 +207,8 @@ const ClientsPage = () => {
                     clients={filteredClients.filter(client => client.status === 'active')} 
                     getStatusBadge={getStatusBadge} 
                     getTypeBadge={getTypeBadge} 
+                    onContact={handleContactClient}
+                    onViewProfile={handleViewProfile}
                   />
                 </TabsContent>
 
@@ -194,6 +217,8 @@ const ClientsPage = () => {
                     clients={filteredClients.filter(client => client.status === 'inactive')} 
                     getStatusBadge={getStatusBadge} 
                     getTypeBadge={getTypeBadge} 
+                    onContact={handleContactClient}
+                    onViewProfile={handleViewProfile}
                   />
                 </TabsContent>
               </Tabs>
@@ -201,8 +226,8 @@ const ClientsPage = () => {
           </Card>
         </div>
       </main>
-      <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
+      <footer className="bg-gradient-to-r from-purple-100 to-indigo-100 py-4 text-center text-sm text-gray-600">
+        &copy; {new Date().getFullYear()} Sellmate. All rights reserved.
       </footer>
     </div>
   );
@@ -212,13 +237,15 @@ interface ClientsListProps {
   clients: Client[];
   getStatusBadge: (status: Client['status']) => React.ReactNode;
   getTypeBadge: (type: Client['type']) => React.ReactNode;
+  onContact: (clientId: string) => void;
+  onViewProfile: (clientId: string) => void;
 }
 
-const ClientsList = ({ clients, getStatusBadge, getTypeBadge }: ClientsListProps) => {
+const ClientsList = ({ clients, getStatusBadge, getTypeBadge, onContact, onViewProfile }: ClientsListProps) => {
   if (clients.length === 0) {
     return (
       <div className="text-center py-8">
-        <Users className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+        <Users className="h-12 w-12 mx-auto text-purple-300 mb-4" />
         <p className="text-gray-500">No clients found</p>
       </div>
     );
@@ -227,15 +254,15 @@ const ClientsList = ({ clients, getStatusBadge, getTypeBadge }: ClientsListProps
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {clients.map((client) => (
-        <Card key={client.id} className="hover:shadow-md transition-shadow">
+        <Card key={client.id} className="hover:shadow-lg transition-shadow border-purple-100 overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
           <div className="p-4">
             <div className="flex justify-between items-start mb-3">
               <div className="flex items-center">
-                <div className="bg-purple-100 p-2 rounded-full mr-3">
+                <div className="bg-gradient-to-r from-purple-200 to-indigo-200 p-2 rounded-full mr-3">
                   <User className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">{client.name}</h3>
+                  <h3 className="font-bold text-lg text-purple-800">{client.name}</h3>
                   <p className="text-sm text-gray-600">{client.email}</p>
                 </div>
               </div>
@@ -253,11 +280,21 @@ const ClientsList = ({ clients, getStatusBadge, getTypeBadge }: ClientsListProps
             </div>
             
             <div className="flex gap-2 mt-4">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                onClick={() => onViewProfile(client.id)}
+              >
                 <User className="h-4 w-4 mr-2" />
                 View Profile
               </Button>
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-purple-300 text-purple-700 hover:bg-purple-50 hover:border-purple-500"
+                onClick={() => onContact(client.id)}
+              >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Contact
               </Button>
