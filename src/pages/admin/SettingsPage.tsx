@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -14,7 +15,7 @@ import {
   Database, 
   Server, 
   Shield, 
-  CreditCard 
+  AlertCircle 
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -22,12 +23,20 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { toast } from "@/components/ui/use-toast";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
     navigate('/dashboard/admin');
+  };
+  
+  const handleSaveChanges = () => {
+    toast({
+      title: "Settings saved",
+      description: "Your changes have been saved successfully",
+    });
   };
 
   return (
@@ -40,24 +49,23 @@ const SettingsPage = () => {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <h1 className="text-3xl font-bold">System Settings</h1>
+            <h1 className="text-3xl font-bold">Sellmate System Settings</h1>
           </div>
 
-          <Card className="mb-8">
-            <CardHeader>
+          <Card className="mb-8 border-2 border-red-100 shadow-md">
+            <CardHeader className="bg-gradient-to-r from-red-50 to-white">
               <CardTitle>Configure System Settings</CardTitle>
               <CardDescription>
-                Manage all aspects of the MultiPortal platform
+                Manage all aspects of the Sellmate platform
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="general" className="w-full">
-                <TabsList className="mb-6">
-                  <TabsTrigger value="general">General</TabsTrigger>
-                  <TabsTrigger value="security">Security</TabsTrigger>
-                  <TabsTrigger value="notifications">Notifications</TabsTrigger>
-                  <TabsTrigger value="integrations">Integrations</TabsTrigger>
-                  <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
+                <TabsList className="mb-6 bg-red-100">
+                  <TabsTrigger value="general" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">General</TabsTrigger>
+                  <TabsTrigger value="security" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">Security</TabsTrigger>
+                  <TabsTrigger value="notifications" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">Notifications</TabsTrigger>
+                  <TabsTrigger value="maintenance" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">Maintenance</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="general" className="mt-0 space-y-6">
@@ -74,15 +82,15 @@ const SettingsPage = () => {
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <Label htmlFor="site-name">Site Name</Label>
-                        <Input id="site-name" defaultValue="MultiPortal" />
+                        <Input id="site-name" defaultValue="Sellmate" />
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="site-description">Site Description</Label>
-                        <Input id="site-description" defaultValue="A multi-purpose portal for buyers, sellers, and middlemen" />
+                        <Input id="site-description" defaultValue="A platform connecting buyers and sellers through trusted middlemen" />
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="contact-email">Contact Email</Label>
-                        <Input id="contact-email" defaultValue="support@multiportal.com" />
+                        <Input id="contact-email" defaultValue="support@sellmate.com" />
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="timezone">Default Timezone</Label>
@@ -105,7 +113,7 @@ const SettingsPage = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Changes
                       </Button>
@@ -153,7 +161,7 @@ const SettingsPage = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Changes
                       </Button>
@@ -213,7 +221,7 @@ const SettingsPage = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Changes
                       </Button>
@@ -254,7 +262,7 @@ const SettingsPage = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Changes
                       </Button>
@@ -297,11 +305,11 @@ const SettingsPage = () => {
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="alert-email">Alert Email Address</Label>
-                        <Input id="alert-email" defaultValue="alerts@multiportal.com" />
+                        <Input id="alert-email" defaultValue="alerts@sellmate.com" />
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Changes
                       </Button>
@@ -336,115 +344,21 @@ const SettingsPage = () => {
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="email-subject">Email Subject</Label>
-                        <Input id="email-subject" defaultValue="Welcome to MultiPortal!" />
+                        <Input id="email-subject" defaultValue="Welcome to Sellmate!" />
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="email-content">Email Content</Label>
                         <textarea
                           id="email-content"
                           className="min-h-[200px] rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-                          defaultValue="Welcome to MultiPortal! We're excited to have you join our platform..."
+                          defaultValue="Welcome to Sellmate! We're excited to have you join our platform..."
                         />
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Template
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="integrations" className="mt-0 space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center">
-                        <CreditCard className="h-5 w-5 mr-2 text-red-600" />
-                        <CardTitle>Payment Gateways</CardTitle>
-                      </div>
-                      <CardDescription>
-                        Configure payment processing options
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium">PayPal Integration</h4>
-                          <p className="text-sm text-gray-500">Enable PayPal as a payment option</p>
-                        </div>
-                        <Switch defaultChecked id="paypal-integration" />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="paypal-client-id">PayPal Client ID</Label>
-                        <Input id="paypal-client-id" defaultValue="client_id_123456789" type="password" />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="paypal-secret">PayPal Secret</Label>
-                        <Input id="paypal-secret" defaultValue="paypal_secret_key_123456789" type="password" />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium">Stripe Integration</h4>
-                          <p className="text-sm text-gray-500">Enable Stripe as a payment option</p>
-                        </div>
-                        <Switch defaultChecked id="stripe-integration" />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="stripe-key">Stripe API Key</Label>
-                        <Input id="stripe-key" defaultValue="sk_test_123456789" type="password" />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="stripe-webhook">Stripe Webhook Secret</Label>
-                        <Input id="stripe-webhook" defaultValue="whsec_123456789" type="password" />
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-end">
-                      <Button>
-                        <Save className="h-4 w-4 mr-2" />
-                        Save Integration Settings
-                      </Button>
-                    </CardFooter>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center">
-                        <Globe className="h-5 w-5 mr-2 text-red-600" />
-                        <CardTitle>Third Party Services</CardTitle>
-                      </div>
-                      <CardDescription>
-                        Configure external service integrations
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium">Google Analytics</h4>
-                          <p className="text-sm text-gray-500">Enable Google Analytics tracking</p>
-                        </div>
-                        <Switch defaultChecked id="google-analytics" />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="ga-tracking-id">Tracking ID</Label>
-                        <Input id="ga-tracking-id" defaultValue="UA-123456789-1" />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium">Mailchimp Integration</h4>
-                          <p className="text-sm text-gray-500">Connect to Mailchimp for email marketing</p>
-                        </div>
-                        <Switch id="mailchimp-integration" />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="mailchimp-api">API Key</Label>
-                        <Input id="mailchimp-api" placeholder="Enter Mailchimp API key" />
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-end">
-                      <Button>
-                        <Save className="h-4 w-4 mr-2" />
-                        Save Integration Settings
                       </Button>
                     </CardFooter>
                   </Card>
@@ -500,7 +414,7 @@ const SettingsPage = () => {
                         <Database className="h-4 w-4 mr-2" />
                         Backup Now
                       </Button>
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Settings
                       </Button>
@@ -546,7 +460,7 @@ const SettingsPage = () => {
                         <Trash2 className="h-4 w-4 mr-2" />
                         Clear Cache Now
                       </Button>
-                      <Button>
+                      <Button onClick={handleSaveChanges}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Settings
                       </Button>
@@ -559,7 +473,7 @@ const SettingsPage = () => {
         </div>
       </main>
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
+        &copy; {new Date().getFullYear()} Sellmate. All rights reserved.
       </footer>
     </div>
   );

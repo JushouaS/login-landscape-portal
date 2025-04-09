@@ -30,6 +30,7 @@ import MiddlemanTransactionsPage from "./pages/middleman/TransactionsPage";
 import MiddlemanHistoryPage from "./pages/middleman/HistoryPage";
 import MiddlemanSchedulePage from "./pages/middleman/SchedulePage";
 import MiddlemanClientsPage from "./pages/middleman/ClientsPage";
+import MiddlemanChatPage from "./pages/middleman/ChatPage";
 
 // Admin Pages
 import AdminOverviewPage from "./pages/admin/OverviewPage";
@@ -77,6 +78,7 @@ const App = () => (
           <Route path="/dashboard/middleman/history" element={<MiddlemanHistoryPage />} />
           <Route path="/dashboard/middleman/schedule" element={<MiddlemanSchedulePage />} />
           <Route path="/dashboard/middleman/clients" element={<MiddlemanClientsPage />} />
+          <Route path="/dashboard/middleman/chat" element={<MiddlemanChatPage />} />
           
           {/* Admin Feature Routes */}
           <Route path="/dashboard/admin/overview" element={<AdminOverviewPage />} />
