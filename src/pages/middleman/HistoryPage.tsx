@@ -37,7 +37,7 @@ const HistoryPage = () => {
       date: '2023-10-15',
       parties: 'John Smith & Tech Shop Inc.',
       result: 'approved',
-      amount: 1249.99,
+      amount: 69999.44, // Converted from 1249.99 USD to PHP
       type: 'Product Purchase',
       resolution: 'Transaction completed successfully'
     },
@@ -47,7 +47,7 @@ const HistoryPage = () => {
       date: '2023-10-22',
       parties: 'Sarah Johnson & Home Goods Store',
       result: 'rejected',
-      amount: 379.99,
+      amount: 21279.44, // Converted from 379.99 USD to PHP
       type: 'Product Purchase',
       resolution: 'Product was not as described'
     },
@@ -57,7 +57,7 @@ const HistoryPage = () => {
       date: '2023-10-30',
       parties: 'Michael Brown & Sports Outlet',
       result: 'approved',
-      amount: 199.99,
+      amount: 11199.44, // Converted from 199.99 USD to PHP
       type: 'Product Purchase',
       resolution: 'Transaction completed successfully'
     },
@@ -67,7 +67,7 @@ const HistoryPage = () => {
       date: '2023-11-05',
       parties: 'Emma Wilson & Fashion Boutique',
       result: 'approved',
-      amount: 89.99,
+      amount: 5039.44, // Converted from 89.99 USD to PHP
       type: 'Product Purchase',
       resolution: 'Transaction completed successfully'
     },
@@ -77,7 +77,7 @@ const HistoryPage = () => {
       date: '2023-11-10',
       parties: 'Robert Davis & Electronics Store',
       result: 'cancelled',
-      amount: 599.99,
+      amount: 33599.44, // Converted from 599.99 USD to PHP
       type: 'Product Purchase',
       resolution: 'Buyer cancelled before delivery'
     }
@@ -213,7 +213,7 @@ const HistoryPage = () => {
                         <td className="py-3 px-4 text-gray-600">{new Date(transaction.date).toLocaleDateString()}</td>
                         <td className="py-3 px-4">{transaction.parties}</td>
                         <td className="py-3 px-4">{transaction.type}</td>
-                        <td className="py-3 px-4">${transaction.amount.toFixed(2)}</td>
+                        <td className="py-3 px-4">₱{transaction.amount.toFixed(2)}</td>
                         <td className="py-3 px-4">{getResultBadge(transaction.result)}</td>
                         <td className="py-3 px-4 max-w-[200px] truncate" title={transaction.resolution}>
                           {transaction.resolution}
@@ -228,7 +228,7 @@ const HistoryPage = () => {
         </div>
       </main>
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
+        &copy; {new Date().getFullYear()} Sellmate. All rights reserved.
       </footer>
     </div>
   );

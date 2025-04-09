@@ -26,7 +26,7 @@ const PaymentsPage = () => {
       id: '1',
       transactionId: 'TXN-78901',
       date: '2023-11-15',
-      amount: 149.99,
+      amount: 8399.44, // Converted from 149.99 USD to PHP
       status: 'completed',
       type: 'sale',
       customer: 'John Smith'
@@ -35,7 +35,7 @@ const PaymentsPage = () => {
       id: '2',
       transactionId: 'TXN-78902',
       date: '2023-11-12',
-      amount: 79.99,
+      amount: 4479.44, // Converted from 79.99 USD to PHP
       status: 'completed',
       type: 'sale',
       customer: 'Sarah Johnson'
@@ -44,7 +44,7 @@ const PaymentsPage = () => {
       id: '3',
       transactionId: 'TXN-78903',
       date: '2023-11-10',
-      amount: 29.99,
+      amount: 1679.44, // Converted from 29.99 USD to PHP
       status: 'failed',
       type: 'sale',
       customer: 'Michael Brown'
@@ -53,7 +53,7 @@ const PaymentsPage = () => {
       id: '4',
       transactionId: 'TXN-78904',
       date: '2023-11-08',
-      amount: 49.99,
+      amount: 2799.44, // Converted from 49.99 USD to PHP
       status: 'pending',
       type: 'refund',
       customer: 'Emma Wilson'
@@ -62,7 +62,7 @@ const PaymentsPage = () => {
       id: '5',
       transactionId: 'TXN-78905',
       date: '2023-11-01',
-      amount: 500.00,
+      amount: 28000.00, // Converted from 500.00 USD to PHP
       status: 'completed',
       type: 'payout',
       customer: 'System'
@@ -119,7 +119,7 @@ const PaymentsPage = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-sm font-medium text-gray-500">Available Balance</p>
-                    <h3 className="text-2xl font-bold mt-1">$2,580.75</h3>
+                    <h3 className="text-2xl font-bold mt-1">₱144,522.00</h3>
                     <Button variant="link" className="px-0 py-0 h-auto text-sm text-green-600">
                       Request Payout
                     </Button>
@@ -136,7 +136,7 @@ const PaymentsPage = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-sm font-medium text-gray-500">Total Sales</p>
-                    <h3 className="text-2xl font-bold mt-1">$15,890.75</h3>
+                    <h3 className="text-2xl font-bold mt-1">₱889,882.00</h3>
                     <p className="text-sm text-gray-500 mt-1">Last 30 days</p>
                   </div>
                   <div className="bg-green-50 p-3 rounded-full">
@@ -151,7 +151,7 @@ const PaymentsPage = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-sm font-medium text-gray-500">Total Refunds</p>
-                    <h3 className="text-2xl font-bold mt-1">$490.25</h3>
+                    <h3 className="text-2xl font-bold mt-1">₱27,454.00</h3>
                     <p className="text-sm text-gray-500 mt-1">Last 30 days</p>
                   </div>
                   <div className="bg-red-50 p-3 rounded-full">
@@ -233,7 +233,7 @@ const PaymentsPage = () => {
         </div>
       </main>
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
+        &copy; {new Date().getFullYear()} Sellmate. All rights reserved.
       </footer>
     </div>
   );
@@ -283,7 +283,7 @@ const PaymentsList = ({ payments, getStatusBadge, getTypeIcon, getTypeText }: Pa
               </td>
               <td className="py-3 px-4">{payment.customer}</td>
               <td className="py-3 px-4 font-medium">
-                ${payment.amount.toFixed(2)}
+                ₱{payment.amount.toFixed(2)}
               </td>
               <td className="py-3 px-4">{getStatusBadge(payment.status)}</td>
               <td className="py-3 px-4 text-right">

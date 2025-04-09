@@ -48,7 +48,7 @@ const HomePage = () => {
       <main className="flex-1 gradient-background">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Welcome to MultiPortal</h1>
+            <h1 className="text-4xl font-bold mb-4">Welcome to Sellmate</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Select your role to continue to the appropriate portal
             </p>
@@ -72,7 +72,7 @@ const HomePage = () => {
         </div>
       </main>
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
+        &copy; {new Date().getFullYear()} Sellmate. All rights reserved.
       </footer>
     </div>
   );

@@ -26,7 +26,7 @@ const OrdersPage = () => {
       orderNumber: 'ORDER-12345',
       date: '2023-10-15',
       status: 'delivered',
-      total: 149.99,
+      total: 8399.44, // Converted from 149.99 USD to PHP (approx 56:1)
       items: 2
     },
     {
@@ -34,7 +34,7 @@ const OrdersPage = () => {
       orderNumber: 'ORDER-12346',
       date: '2023-11-02',
       status: 'shipped',
-      total: 79.99,
+      total: 4479.44, // Converted from 79.99 USD to PHP
       items: 1
     },
     {
@@ -42,7 +42,7 @@ const OrdersPage = () => {
       orderNumber: 'ORDER-12347',
       date: '2023-11-20',
       status: 'processing',
-      total: 299.99,
+      total: 16799.44, // Converted from 299.99 USD to PHP
       items: 3
     },
     {
@@ -50,7 +50,7 @@ const OrdersPage = () => {
       orderNumber: 'ORDER-12348',
       date: '2023-09-05',
       status: 'cancelled',
-      total: 49.99,
+      total: 2799.44, // Converted from 49.99 USD to PHP
       items: 1
     }
   ];
@@ -136,7 +136,7 @@ const OrdersPage = () => {
         </div>
       </main>
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
+        &copy; {new Date().getFullYear()} Sellmate. All rights reserved.
       </footer>
     </div>
   );
@@ -182,7 +182,7 @@ const OrdersList = ({
             </div>
             
             <div className="text-center">
-              <p className="font-medium">${order.total.toFixed(2)}</p>
+              <p className="font-medium">₱{order.total.toFixed(2)}</p>
               <p className="text-sm text-gray-500">{order.items} item{order.items !== 1 ? 's' : ''}</p>
             </div>
             
