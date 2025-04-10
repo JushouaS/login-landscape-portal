@@ -1,14 +1,27 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { AuthLayout } from "@/components/AuthLayout";
 import { AuthForm } from "@/components/AuthForm";
 import { ShoppingBag, Store, UserCheck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const SignupPage = () => {
   const { role } = useParams<{ role?: string }>();
   const navigate = useNavigate();
+  const [showTerms, setShowTerms] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   
   useEffect(() => {
     // Validate role parameter
@@ -16,6 +29,22 @@ const SignupPage = () => {
       navigate("/");
     }
   }, [role, navigate]);
+
+  const handleRoleSelect = (selectedRole: string) => {
+    setShowTerms(true);
+    // Store the selected role for later use after terms acceptance
+    sessionStorage.setItem("selectedRole", selectedRole);
+  };
+
+  const handleAcceptTerms = () => {
+    setShowTerms(false);
+    setTermsAccepted(true);
+    // Get the stored role and navigate to it
+    const selectedRole = sessionStorage.getItem("selectedRole");
+    if (selectedRole) {
+      navigate(`/signup/${selectedRole}`);
+    }
+  };
 
   if (!role) {
     return (
@@ -25,7 +54,7 @@ const SignupPage = () => {
         className="bg-gradient-to-r from-blue-50 to-indigo-50"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 max-w-2xl mx-auto">
-          <Link to="/signup/buyer" className="hover:scale-105 transition-transform duration-200">
+          <div className="hover:scale-105 transition-transform duration-200 cursor-pointer" onClick={() => handleRoleSelect("buyer")}>
             <Card className="overflow-hidden border-2 border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all h-full">
               <div className="bg-blue-100 p-4 flex justify-center">
                 <div className="bg-blue-500 text-white rounded-full p-3">
@@ -37,9 +66,9 @@ const SignupPage = () => {
                 <p className="text-sm text-gray-600">Find trusted middlemen to help with your purchases</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
           
-          <Link to="/signup/seller" className="hover:scale-105 transition-transform duration-200">
+          <div className="hover:scale-105 transition-transform duration-200 cursor-pointer" onClick={() => handleRoleSelect("seller")}>
             <Card className="overflow-hidden border-2 border-green-200 hover:border-green-400 hover:shadow-lg transition-all h-full">
               <div className="bg-green-100 p-4 flex justify-center">
                 <div className="bg-green-500 text-white rounded-full p-3">
@@ -51,9 +80,9 @@ const SignupPage = () => {
                 <p className="text-sm text-gray-600">Sell your products with secure transaction support</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
           
-          <Link to="/signup/middleman" className="hover:scale-105 transition-transform duration-200">
+          <div className="hover:scale-105 transition-transform duration-200 cursor-pointer" onClick={() => handleRoleSelect("middleman")}>
             <Card className="overflow-hidden border-2 border-purple-200 hover:border-purple-400 hover:shadow-lg transition-all h-full">
               <div className="bg-purple-100 p-4 flex justify-center">
                 <div className="bg-purple-500 text-white rounded-full p-3">
@@ -61,11 +90,11 @@ const SignupPage = () => {
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-purple-600 mb-1">Middleman</h3>
+                <h3 className="text-xl font-semibold text-purple-600 mb-1 whitespace-nowrap">Middleman</h3>
                 <p className="text-sm text-gray-600">Facilitate safe exchanges between buyers and sellers</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
         </div>
         
         <div className="mt-8 text-center text-gray-500 text-sm">
@@ -74,6 +103,82 @@ const SignupPage = () => {
             Login
           </Link>
         </div>
+
+        {/* Terms and Conditions Dialog */}
+        <Dialog open={showTerms} onOpenChange={setShowTerms}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Terms of Service</DialogTitle>
+              <DialogDescription>
+                Please read and accept our terms of service before continuing
+              </DialogDescription>
+            </DialogHeader>
+            <ScrollArea className="h-[50vh]">
+              <div className="p-4 space-y-4">
+                <h3 className="font-semibold text-lg">1. Introduction</h3>
+                <p className="text-sm text-gray-700">
+                  Welcome to Sellmate ("Company", "we", "our", "us"). These Terms of Service ("Terms", "Terms of Service") govern your use of our website located at sellmate.com (together or individually "Service") operated by Sellmate.
+                </p>
+                
+                <h3 className="font-semibold text-lg">2. User Accounts</h3>
+                <p className="text-sm text-gray-700">
+                  When you create an account with us, you must provide us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.
+                </p>
+                
+                <h3 className="font-semibold text-lg">3. Middleman Services</h3>
+                <p className="text-sm text-gray-700">
+                  Sellmate provides a platform that connects buyers, sellers, and middlemen to facilitate secure transactions. Middlemen on our platform are independent contractors and not employees of Sellmate.
+                </p>
+                
+                <h3 className="font-semibold text-lg">4. Fees and Payment</h3>
+                <p className="text-sm text-gray-700">
+                  Sellmate charges a service fee for transactions facilitated through our platform. The fee structure is clearly displayed before you confirm a transaction.
+                </p>
+                
+                <h3 className="font-semibold text-lg">5. Prohibited Uses</h3>
+                <p className="text-sm text-gray-700">
+                  You may use our Service only for lawful purposes and in accordance with Terms. You agree not to use our Service for any illegal purpose or to solicit others to perform or participate in any unlawful acts.
+                </p>
+                
+                <h3 className="font-semibold text-lg">6. Termination</h3>
+                <p className="text-sm text-gray-700">
+                  We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.
+                </p>
+                
+                <h3 className="font-semibold text-lg">7. Limitation of Liability</h3>
+                <p className="text-sm text-gray-700">
+                  In no event shall Sellmate, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages.
+                </p>
+                
+                <h3 className="font-semibold text-lg">8. Changes to Terms</h3>
+                <p className="text-sm text-gray-700">
+                  We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect.
+                </p>
+              </div>
+            </ScrollArea>
+            <DialogFooter className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I accept the terms and conditions
+                </label>
+              </div>
+              <Button 
+                onClick={handleAcceptTerms} 
+                disabled={!termsAccepted}
+              >
+                Continue
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </AuthLayout>
     );
   }
