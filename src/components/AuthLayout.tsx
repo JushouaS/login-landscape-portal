@@ -37,21 +37,23 @@ export function AuthLayout({
       
       {/* Main content */}
       <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in">
           <div className="bg-gradient-to-r from-blue-600 to-blue-500 h-2"></div>
           <div className="p-8">
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 animate-fade-in">
                 <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
                 {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
               </div>
               
-              {children}
+              <div className="animate-fade-in">
+                {children}
+              </div>
               
               {showBackLink && (
                 <Link 
                   to={backLinkUrl} 
-                  className="flex items-center text-sm text-muted-foreground hover:text-blue-600 gap-1 transition-colors"
+                  className="flex items-center text-sm text-muted-foreground hover:text-blue-600 gap-1 transition-colors animate-fade-in"
                 >
                   <ArrowLeft className="h-3 w-3" />
                   <span>{backLinkText}</span>
@@ -63,8 +65,18 @@ export function AuthLayout({
       </div>
       
       {/* Footer */}
-      <footer className="py-3 text-center text-xs text-gray-500 bg-white border-t">
-        © {new Date().getFullYear()} Sellmate. All rights reserved.
+      <footer className="py-4 text-center text-xs text-gray-500 bg-white border-t">
+        <div className="container mx-auto">
+          <div className="mb-2">© {new Date().getFullYear()} Sellmate. All rights reserved.</div>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link to="/about" className="hover:text-blue-600 transition-colors">About Us</Link>
+            <Link to="/careers" className="hover:text-blue-600 transition-colors">Careers</Link>
+            <Link to="/blog" className="hover:text-blue-600 transition-colors">Blog</Link>
+            <Link to="/terms" className="hover:text-blue-600 transition-colors">Terms of Service</Link>
+            <Link to="/privacy" className="hover:text-blue-600 transition-colors">Privacy Policy</Link>
+            <Link to="/security" className="hover:text-blue-600 transition-colors">Security</Link>
+          </div>
+        </div>
       </footer>
     </div>
   );

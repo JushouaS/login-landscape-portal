@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 interface AuthFormProps {
   type: "login" | "signup";
-  role: "buyer" | "seller" | "middleman" | "admin";
+  role: "buyer" | "seller" | "middleman";
 }
 
 export function AuthForm({ type, role }: AuthFormProps) {
@@ -54,8 +54,8 @@ export function AuthForm({ type, role }: AuthFormProps) {
         return;
       }
 
-      // Check for ID document requirement for middleman and admin
-      if ((role === "middleman" || role === "admin") && !idDocument && type === "signup") {
+      // Check for ID document requirement for middleman
+      if (role === "middleman" && !idDocument && type === "signup") {
         toast.error(`Valid ID document is required for ${role} registration`);
         setIsLoading(false);
         return;
@@ -152,7 +152,7 @@ export function AuthForm({ type, role }: AuthFormProps) {
             </div>
           </div>
 
-          {(role === "middleman" || role === "admin") && (
+          {role === "middleman" && (
             <div className="space-y-2">
               <Label htmlFor="idDocument">Valid ID Document</Label>
               <div className="border border-input rounded-md p-2">

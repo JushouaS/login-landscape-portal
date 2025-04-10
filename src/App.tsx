@@ -38,6 +38,14 @@ import AdminUsersPage from "./pages/admin/UsersPage";
 import AdminAnalyticsPage from "./pages/admin/AnalyticsPage";
 import AdminSettingsPage from "./pages/admin/SettingsPage";
 
+// Info Pages
+import AboutUsPage from "./pages/info/AboutUsPage";
+import CareersPage from "./pages/info/CareersPage";
+import BlogPage from "./pages/info/BlogPage";
+import TermsOfServicePage from "./pages/info/TermsOfServicePage";
+import PrivacyPolicyPage from "./pages/info/PrivacyPolicyPage";
+import SecurityPage from "./pages/info/SecurityPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -85,6 +93,14 @@ const App = () => (
           <Route path="/dashboard/admin/users" element={<AdminUsersPage />} />
           <Route path="/dashboard/admin/analytics" element={<AdminAnalyticsPage />} />
           <Route path="/dashboard/admin/settings" element={<AdminSettingsPage />} />
+          
+          {/* Information Pages */}
+          <Route path="/about" element={<AboutUsPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/terms" element={<TermsOfServicePage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/security" element={<SecurityPage />} />
           
           {/* Catch-all Route */}
           <Route path="*" element={<NotFound />} />
