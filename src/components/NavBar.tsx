@@ -43,7 +43,7 @@ export function NavBar({ userType }: NavBarProps) {
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <Link to="/" className="text-xl font-bold">
-            Multi<span className="text-primary">Portal</span>
+            Sell<span className="text-primary">mate</span>
           </Link>
 
           {/* Mobile menu button */}
