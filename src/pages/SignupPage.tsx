@@ -90,7 +90,7 @@ const SignupPage = () => {
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-purple-600 mb-1 whitespace-nowrap">Middleman</h3>
+                <h3 className="text-xl font-semibold text-purple-600 mb-1">Middleman</h3>
                 <p className="text-sm text-gray-600">Facilitate safe exchanges between buyers and sellers</p>
               </CardContent>
             </Card>
@@ -103,6 +103,18 @@ const SignupPage = () => {
             Login
           </Link>
         </div>
+
+        <footer className="mt-10 text-center text-xs text-gray-500">
+          <div className="flex justify-center flex-wrap space-x-4 mb-2">
+            <Link to="/about" className="hover:text-blue-600">About Us</Link>
+            <Link to="/careers" className="hover:text-blue-600">Careers</Link>
+            <Link to="/blog" className="hover:text-blue-600">Blog</Link>
+            <Link to="/terms" className="hover:text-blue-600">Terms of Service</Link>
+            <Link to="/privacy" className="hover:text-blue-600">Privacy Policy</Link>
+            <Link to="/security" className="hover:text-blue-600">Security</Link>
+          </div>
+          <p>© {new Date().getFullYear()} Sellmate. All rights reserved.</p>
+        </footer>
 
         {/* Terms and Conditions Dialog */}
         <Dialog open={showTerms} onOpenChange={setShowTerms}>
@@ -198,6 +210,18 @@ const SignupPage = () => {
           Login
         </Link>
       </p>
+
+      <footer className="mt-10 text-center text-xs text-gray-500">
+        <div className="flex justify-center flex-wrap space-x-4 mb-2">
+          <Link to="/about" className="hover:text-blue-600">About Us</Link>
+          <Link to="/careers" className="hover:text-blue-600">Careers</Link>
+          <Link to="/blog" className="hover:text-blue-600">Blog</Link>
+          <Link to="/terms" className="hover:text-blue-600">Terms of Service</Link>
+          <Link to="/privacy" className="hover:text-blue-600">Privacy Policy</Link>
+          <Link to="/security" className="hover:text-blue-600">Security</Link>
+        </div>
+        <p>© {new Date().getFullYear()} Sellmate. All rights reserved.</p>
+      </footer>
     </AuthLayout>
   );
 };

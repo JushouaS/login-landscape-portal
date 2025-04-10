@@ -7,6 +7,7 @@ import { CreditCard, ArrowLeft, Download, Filter, ArrowUpRight, ArrowDownRight }
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 interface Payment {
   id: string;
@@ -26,7 +27,7 @@ const PaymentsPage = () => {
       id: '1',
       transactionId: 'TXN-78901',
       date: '2023-11-15',
-      amount: 8399.44, // Converted from 149.99 USD to PHP
+      amount: 8399.44, // PHP amount
       status: 'completed',
       type: 'sale',
       customer: 'John Smith'
@@ -35,7 +36,7 @@ const PaymentsPage = () => {
       id: '2',
       transactionId: 'TXN-78902',
       date: '2023-11-12',
-      amount: 4479.44, // Converted from 79.99 USD to PHP
+      amount: 4479.44, // PHP amount
       status: 'completed',
       type: 'sale',
       customer: 'Sarah Johnson'
@@ -44,7 +45,7 @@ const PaymentsPage = () => {
       id: '3',
       transactionId: 'TXN-78903',
       date: '2023-11-10',
-      amount: 1679.44, // Converted from 29.99 USD to PHP
+      amount: 1679.44, // PHP amount
       status: 'failed',
       type: 'sale',
       customer: 'Michael Brown'
@@ -53,7 +54,7 @@ const PaymentsPage = () => {
       id: '4',
       transactionId: 'TXN-78904',
       date: '2023-11-08',
-      amount: 2799.44, // Converted from 49.99 USD to PHP
+      amount: 2799.44, // PHP amount
       status: 'pending',
       type: 'refund',
       customer: 'Emma Wilson'
@@ -62,7 +63,7 @@ const PaymentsPage = () => {
       id: '5',
       transactionId: 'TXN-78905',
       date: '2023-11-01',
-      amount: 28000.00, // Converted from 500.00 USD to PHP
+      amount: 28000.00, // PHP amount
       status: 'completed',
       type: 'payout',
       customer: 'System'
@@ -71,6 +72,22 @@ const PaymentsPage = () => {
 
   const handleGoBack = () => {
     navigate('/dashboard/seller');
+  };
+
+  const handleRequestPayout = () => {
+    toast.success("Payout request submitted. It will be processed within 2-3 business days.");
+  };
+
+  const handleExport = () => {
+    toast.success("Transaction data exported successfully. Check your downloads folder.");
+  };
+
+  const handleFilter = () => {
+    toast.info("Filter options will be available soon.");
+  };
+
+  const handleViewTransaction = () => {
+    toast.info("Transaction details view will be available soon.");
   };
 
   const getStatusBadge = (status: Payment['status']) => {
@@ -120,7 +137,11 @@ const PaymentsPage = () => {
                   <div>
                     <p className="text-sm font-medium text-gray-500">Available Balance</p>
                     <h3 className="text-2xl font-bold mt-1">₱144,522.00</h3>
-                    <Button variant="link" className="px-0 py-0 h-auto text-sm text-green-600">
+                    <Button 
+                      variant="link" 
+                      className="px-0 py-0 h-auto text-sm text-green-600"
+                      onClick={handleRequestPayout}
+                    >
                       Request Payout
                     </Button>
                   </div>
@@ -172,11 +193,11 @@ const PaymentsPage = () => {
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleFilter}>
                     <Filter className="h-4 w-4 mr-2" />
                     Filter
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleExport}>
                     <Download className="h-4 w-4 mr-2" />
                     Export
                   </Button>
@@ -198,6 +219,7 @@ const PaymentsPage = () => {
                     getStatusBadge={getStatusBadge}
                     getTypeIcon={getTypeIcon}
                     getTypeText={getTypeText}
+                    onViewTransaction={handleViewTransaction}
                   />
                 </TabsContent>
 
@@ -207,6 +229,7 @@ const PaymentsPage = () => {
                     getStatusBadge={getStatusBadge}
                     getTypeIcon={getTypeIcon}
                     getTypeText={getTypeText}
+                    onViewTransaction={handleViewTransaction}
                   />
                 </TabsContent>
 
@@ -216,6 +239,7 @@ const PaymentsPage = () => {
                     getStatusBadge={getStatusBadge}
                     getTypeIcon={getTypeIcon}
                     getTypeText={getTypeText}
+                    onViewTransaction={handleViewTransaction}
                   />
                 </TabsContent>
 
@@ -225,6 +249,7 @@ const PaymentsPage = () => {
                     getStatusBadge={getStatusBadge}
                     getTypeIcon={getTypeIcon}
                     getTypeText={getTypeText}
+                    onViewTransaction={handleViewTransaction}
                   />
                 </TabsContent>
               </Tabs>
@@ -244,9 +269,10 @@ interface PaymentsListProps {
   getStatusBadge: (status: Payment['status']) => React.ReactNode;
   getTypeIcon: (type: Payment['type']) => React.ReactNode;
   getTypeText: (type: Payment['type']) => React.ReactNode;
+  onViewTransaction: () => void;
 }
 
-const PaymentsList = ({ payments, getStatusBadge, getTypeIcon, getTypeText }: PaymentsListProps) => {
+const PaymentsList = ({ payments, getStatusBadge, getTypeIcon, getTypeText, onViewTransaction }: PaymentsListProps) => {
   if (payments.length === 0) {
     return (
       <div className="text-center py-8">
@@ -287,7 +313,7 @@ const PaymentsList = ({ payments, getStatusBadge, getTypeIcon, getTypeText }: Pa
               </td>
               <td className="py-3 px-4">{getStatusBadge(payment.status)}</td>
               <td className="py-3 px-4 text-right">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={onViewTransaction}>
                   View
                 </Button>
               </td>

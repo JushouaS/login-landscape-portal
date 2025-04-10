@@ -1,15 +1,16 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Upload } from "lucide-react";
+import { Eye, EyeOff, Upload, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
+import { Progress } from "@/components/ui/progress";
 
 interface AuthFormProps {
   type: "login" | "signup";
-  role: "buyer" | "seller" | "middleman";
+  role: "buyer" | "seller" | "middleman" | "admin";
 }
 
 export function AuthForm({ type, role }: AuthFormProps) {
@@ -20,8 +21,56 @@ export function AuthForm({ type, role }: AuthFormProps) {
   const [idDocument, setIdDocument] = useState<File | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [passwordValidations, setPasswordValidations] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    special: false
+  });
   
   const navigate = useNavigate();
+
+  // Admin credentials
+  const adminCredentials = {
+    email: "admin@sellmate.com",
+    password: "Admin@123"
+  };
+
+  useEffect(() => {
+    if (role === "admin" && type === "signup") {
+      navigate("/login/admin");
+    }
+  }, [role, type, navigate]);
+
+  useEffect(() => {
+    if (password) {
+      // Check password requirements
+      const validations = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[^A-Za-z0-9]/.test(password)
+      };
+      
+      setPasswordValidations(validations);
+      
+      // Calculate password strength (0-100)
+      const validCount = Object.values(validations).filter(Boolean).length;
+      setPasswordStrength(validCount * 20);
+    } else {
+      setPasswordStrength(0);
+      setPasswordValidations({
+        length: false,
+        uppercase: false,
+        lowercase: false,
+        number: false,
+        special: false
+      });
+    }
+  }, [password]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -41,6 +90,21 @@ export function AuthForm({ type, role }: AuthFormProps) {
       return;
     }
 
+    if (role === "admin" && type === "login") {
+      // Check against admin credentials
+      if (email === adminCredentials.email && password === adminCredentials.password) {
+        setTimeout(() => {
+          setIsLoading(false);
+          toast.success("Admin logged in successfully");
+          navigate("/dashboard/admin");
+        }, 1500);
+      } else {
+        setIsLoading(false);
+        toast.error("Invalid admin credentials");
+      }
+      return;
+    }
+
     if (type === "signup") {
       if (password !== confirmPassword) {
         toast.error("Passwords do not match");
@@ -48,8 +112,9 @@ export function AuthForm({ type, role }: AuthFormProps) {
         return;
       }
       
-      if (password.length < 6) {
-        toast.error("Password must be at least 6 characters");
+      // Check password strength for signup
+      if (passwordStrength < 60) {
+        toast.error("Password does not meet minimum security requirements");
         setIsLoading(false);
         return;
       }
@@ -74,6 +139,17 @@ export function AuthForm({ type, role }: AuthFormProps) {
       
       navigate(`/dashboard/${role}`);
     }, 1500);
+  };
+
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength < 40) return "bg-red-500";
+    if (passwordStrength < 60) return "bg-yellow-500";
+    if (passwordStrength < 80) return "bg-blue-500";
+    return "bg-green-500";
+  };
+
+  const handleContactMiddleman = () => {
+    toast.success("Contact request sent to middleman. They will respond shortly.");
   };
 
   return (
@@ -106,7 +182,10 @@ export function AuthForm({ type, role }: AuthFormProps) {
         <div className="flex justify-between items-center">
           <Label htmlFor="password">Password</Label>
           {type === "login" && (
-            <a href="#" className="text-xs text-primary hover:underline">
+            <a href="#" className="text-xs text-primary hover:underline" onClick={(e) => {
+              e.preventDefault();
+              toast.info("Password reset link sent to your email");
+            }}>
               Forgot password?
             </a>
           )}
@@ -134,6 +213,52 @@ export function AuthForm({ type, role }: AuthFormProps) {
             )}
           </Button>
         </div>
+
+        {type === "signup" && (
+          <div className="mt-2 space-y-2">
+            <div className="space-y-1">
+              <Progress value={passwordStrength} className={getPasswordStrengthColor()} />
+              <p className="text-xs text-gray-500">Password strength: {passwordStrength < 40 ? 'Weak' : passwordStrength < 60 ? 'Fair' : passwordStrength < 80 ? 'Good' : 'Strong'}</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+              <div className="flex items-center gap-1 text-xs">
+                {passwordValidations.length ? 
+                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
+                  <XCircle className="h-3 w-3 text-red-500" />}
+                <span>At least 8 characters</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-xs">
+                {passwordValidations.uppercase ? 
+                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
+                  <XCircle className="h-3 w-3 text-red-500" />}
+                <span>Uppercase letter</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-xs">
+                {passwordValidations.lowercase ? 
+                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
+                  <XCircle className="h-3 w-3 text-red-500" />}
+                <span>Lowercase letter</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-xs">
+                {passwordValidations.number ? 
+                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
+                  <XCircle className="h-3 w-3 text-red-500" />}
+                <span>At least 1 number</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-xs">
+                {passwordValidations.special ? 
+                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
+                  <XCircle className="h-3 w-3 text-red-500" />}
+                <span>Special character</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
       {type === "signup" && (
