@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { AuthLayout } from "@/components/AuthLayout";
@@ -86,7 +87,7 @@ const SignupPage = () => {
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-purple-600 mb-1 whitespace-nowrap">Middleman</h3>
+                <h3 className="text-xl font-semibold text-purple-600 mb-1 text-center mx-auto whitespace-nowrap">Middleman</h3>
                 <p className="text-sm text-gray-600">Facilitate safe exchanges between buyers and sellers</p>
               </CardContent>
             </Card>
