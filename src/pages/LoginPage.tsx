@@ -61,7 +61,7 @@ const LoginPage = () => {
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-purple-600 mb-1">Middleman</h3>
+                <h3 className="text-xl font-semibold text-purple-600 mb-1 whitespace-nowrap">Middleman</h3>
                 <p className="text-sm text-gray-600">Access your middleman account</p>
               </CardContent>
             </Card>

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { AuthLayout } from "@/components/AuthLayout";
@@ -24,7 +23,6 @@ const SignupPage = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   
   useEffect(() => {
-    // Validate role parameter
     if (role && !["buyer", "seller", "middleman"].includes(role)) {
       navigate("/");
     }
@@ -32,14 +30,12 @@ const SignupPage = () => {
 
   const handleRoleSelect = (selectedRole: string) => {
     setShowTerms(true);
-    // Store the selected role for later use after terms acceptance
     sessionStorage.setItem("selectedRole", selectedRole);
   };
 
   const handleAcceptTerms = () => {
     setShowTerms(false);
     setTermsAccepted(true);
-    // Get the stored role and navigate to it
     const selectedRole = sessionStorage.getItem("selectedRole");
     if (selectedRole) {
       navigate(`/signup/${selectedRole}`);
@@ -90,7 +86,7 @@ const SignupPage = () => {
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-purple-600 mb-1">Middleman</h3>
+                <h3 className="text-xl font-semibold text-purple-600 mb-1 whitespace-nowrap">Middleman</h3>
                 <p className="text-sm text-gray-600">Facilitate safe exchanges between buyers and sellers</p>
               </CardContent>
             </Card>
@@ -116,7 +112,6 @@ const SignupPage = () => {
           <p>© {new Date().getFullYear()} Sellmate. All rights reserved.</p>
         </footer>
 
-        {/* Terms and Conditions Dialog */}
         <Dialog open={showTerms} onOpenChange={setShowTerms}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
