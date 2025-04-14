@@ -31,6 +31,7 @@ export interface ChatContact {
   lastMessage: string;
   type: 'buyer' | 'seller' | 'middleman';
   transactionId?: string;
+  initials?: string;
 }
 
 export interface PendingTransaction {

@@ -1,7 +1,7 @@
 
 import { NavBar } from "@/components/NavBar";
 import { Card } from "@/components/ui/card";
-import { UserCheck, BarChart, Calendar, Users } from "lucide-react";
+import { UserCheck, BarChart, Calendar, Users, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const MiddlemanDashboard = () => {
@@ -30,6 +30,12 @@ const MiddlemanDashboard = () => {
       icon: <Users className="h-10 w-10 text-purple-500" />,
       link: "/dashboard/middleman/clients"
     },
+    {
+      title: "Messages",
+      description: "Chat with buyers and sellers",
+      icon: <MessageCircle className="h-10 w-10 text-purple-500" />,
+      link: "/dashboard/middleman/chat"
+    },
   ];
 
   return (
@@ -39,7 +45,7 @@ const MiddlemanDashboard = () => {
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-8">Middleman Dashboard</h1>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
             {dashboardCards.map((card, index) => (
               <Link to={card.link} key={index}>
                 <Card className="dashboard-card hover:border-purple-300 transition-all hover:shadow-md cursor-pointer">
