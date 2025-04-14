@@ -21,6 +21,7 @@ export interface ChatMessage {
   senderType: 'buyer' | 'seller' | 'middleman';
   content: string;
   timestamp: Date;
+  transactionId?: string;
 }
 
 export interface ChatContact {
@@ -29,4 +30,16 @@ export interface ChatContact {
   avatar: string;
   lastMessage: string;
   type: 'buyer' | 'seller' | 'middleman';
+  transactionId?: string;
+}
+
+export interface PendingTransaction {
+  id: string;
+  buyerName: string;
+  sellerName: string;
+  middlemanName?: string;
+  item: string;
+  price: string;
+  date: string;
+  status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
 }

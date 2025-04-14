@@ -4,17 +4,21 @@ import { NavBar } from "@/components/NavBar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search, Send, Phone, Image, Paperclip, ArrowLeft, Info } from "lucide-react";
-import { ChatContact, ChatMessage } from "@/types/middleman";
+import { Search, Send, Phone, Image, Paperclip, ArrowLeft, Info, Clock } from "lucide-react";
+import { ChatContact, ChatMessage, PendingTransaction } from "@/types/middleman";
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
 
 const ChatPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [activeTab, setActiveTab] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [selectedContact, setSelectedContact] = useState<ChatContact | null>(null);
+  const [showPendingTransactions, setShowPendingTransactions] = useState(false);
   const messageEndRef = useRef<HTMLDivElement>(null);
   
   const params = new URLSearchParams(location.search);
@@ -34,6 +38,29 @@ const ChatPage = () => {
       avatar: "",
       lastMessage: "Let me know when the item is ready",
       type: "buyer"
+    }
+  ]);
+  
+  const [pendingTransactions, setPendingTransactions] = useState<PendingTransaction[]>([
+    {
+      id: "pt1",
+      buyerName: "Maria Rodriguez",
+      sellerName: "Me",
+      middlemanName: "Joshua Oswald G. Santos",
+      item: "iPhone 15 Pro",
+      price: "₱85,000",
+      date: "2025-04-12",
+      status: "pending"
+    },
+    {
+      id: "pt2",
+      buyerName: "John Smith",
+      sellerName: "Me",
+      middlemanName: "Karina Delgado",
+      item: "MacBook Pro",
+      price: "₱95,500",
+      date: "2025-04-15",
+      status: "in-progress"
     }
   ]);
 
@@ -106,13 +133,29 @@ const ChatPage = () => {
   };
 
   const filteredContacts = contacts.filter(contact => {
+    // Filter by tab
+    if (activeTab !== "all" && contact.type !== activeTab.toLowerCase()) return false;
+    
     // Filter by search
     if (searchQuery && !contact.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    
     return true;
   });
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const togglePendingTransactions = () => {
+    setShowPendingTransactions(!showPendingTransactions);
   };
 
   return (
@@ -138,6 +181,16 @@ const ChatPage = () => {
               <div className="p-4 border-b border-green-100 bg-white">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-xl font-bold text-green-800">Chats</h2>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-green-300 text-green-600 hover:bg-green-50 flex items-center"
+                    onClick={togglePendingTransactions}
+                  >
+                    <Clock className="h-4 w-4 mr-1" />
+                    Pending
+                    <Badge className="ml-1 bg-green-100 text-green-800">{pendingTransactions.length}</Badge>
+                  </Button>
                 </div>
                 <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -148,10 +201,75 @@ const ChatPage = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
+                <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid grid-cols-3 bg-green-100 w-full">
+                    <TabsTrigger 
+                      value="all" 
+                      className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+                    >
+                      All
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="buyer" 
+                      className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+                    >
+                      Buyer
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="middleman" 
+                      className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+                    >
+                      Middleman
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
 
+              {/* Pending Transactions List */}
+              {showPendingTransactions && (
+                <div className="flex-1 overflow-y-auto bg-green-50 border-b border-green-100">
+                  <div className="p-3 bg-green-100 text-green-800 font-medium flex items-center">
+                    <Clock className="h-4 w-4 mr-2" />
+                    Pending Transactions
+                  </div>
+                  {pendingTransactions.map(transaction => (
+                    <div key={transaction.id} className="p-4 border-b border-green-100 hover:bg-green-100 cursor-pointer">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-green-800">{transaction.item}</span>
+                        <span className="text-green-700 font-medium">{transaction.price}</span>
+                      </div>
+                      <div className="text-sm text-gray-600 mb-1">
+                        <span className="font-medium">Buyer:</span> {transaction.buyerName}
+                      </div>
+                      <div className="text-sm text-gray-600 mb-1">
+                        <span className="font-medium">Middleman:</span> {transaction.middlemanName}
+                      </div>
+                      <div className="text-xs text-gray-500 flex items-center mt-2">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {formatDate(transaction.date)}
+                      </div>
+                      <div className="flex mt-2 space-x-2">
+                        <Button 
+                          size="sm" 
+                          className="w-full text-xs bg-green-500 hover:bg-green-600"
+                        >
+                          View Details
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="text-xs border-green-300 text-green-600"
+                        >
+                          Chat
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* Contacts */}
-              <div className="flex-1 overflow-y-auto bg-white">
+              <div className={`${showPendingTransactions ? 'hidden md:block md:flex-1' : 'flex-1'} overflow-y-auto bg-white`}>
                 {filteredContacts.length > 0 ? (
                   filteredContacts.map((contact) => (
                     <div 
@@ -332,6 +450,38 @@ const ChatPage = () => {
                 </div>
               )}
             </div>
+            
+            {/* Seller profile sidebar (when chat is active) */}
+            {selectedContact && (
+              <div className="hidden lg:block w-72 border-l border-green-100 bg-white">
+                <div className="p-6 flex flex-col items-center">
+                  <Avatar className="h-32 w-32 mb-4 border-4 border-green-200">
+                    <AvatarImage src={sellerProfile.avatar} />
+                    <AvatarFallback className="bg-green-200 text-green-700 text-3xl">
+                      {sellerProfile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <h3 className="text-lg font-semibold text-center mb-1 text-green-800">{sellerProfile.name}</h3>
+                  <p className="text-sm text-gray-500 mb-4">{sellerProfile.email}</p>
+                  <div className="w-full space-y-3">
+                    <div className="bg-green-500 text-white p-3 rounded-md text-center overflow-hidden text-ellipsis">
+                      {sellerProfile.phone}
+                    </div>
+                    <div className="bg-green-500 text-white p-3 rounded-md text-center overflow-hidden text-ellipsis">
+                      {sellerProfile.shopAddress}
+                    </div>
+                  </div>
+                  <div className="mt-6 w-full space-y-3">
+                    <Button className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-colors">
+                      Transaction Details
+                    </Button>
+                    <Button variant="outline" className="w-full border-green-300 text-green-700 hover:bg-green-50">
+                      Contact Support
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </Card>
         </div>
       </main>
