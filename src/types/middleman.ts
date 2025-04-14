@@ -28,5 +28,5 @@ export interface ChatContact {
   name: string;
   avatar: string;
   lastMessage: string;
-  type: 'buyer' | 'seller';
+  type: 'buyer' | 'seller' | 'middleman';
 }

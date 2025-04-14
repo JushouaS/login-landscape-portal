@@ -18,12 +18,14 @@ import PaymentMethodsPage from "./pages/buyer/PaymentMethodsPage";
 import BrowseMiddlemenPage from "./pages/buyer/BrowseMiddlemenPage";
 import OrdersPage from "./pages/buyer/OrdersPage";
 import WishlistPage from "./pages/buyer/WishlistPage";
+import BuyerChatPage from "./pages/buyer/ChatPage";
 
 // Seller Pages
 import SellerProductsPage from "./pages/seller/ProductsPage";
 import SellerAnalyticsPage from "./pages/seller/AnalyticsPage";
 import SellerOrdersPage from "./pages/seller/OrdersPage";
 import SellerPaymentsPage from "./pages/seller/PaymentsPage";
+import SellerChatPage from "./pages/seller/ChatPage";
 
 // Middleman Pages
 import MiddlemanTransactionsPage from "./pages/middleman/TransactionsPage";
@@ -74,12 +76,14 @@ const App = () => (
           <Route path="/dashboard/buyer/middlemen" element={<BrowseMiddlemenPage />} />
           <Route path="/dashboard/buyer/orders" element={<OrdersPage />} />
           <Route path="/dashboard/buyer/wishlist" element={<WishlistPage />} />
+          <Route path="/dashboard/buyer/chat" element={<BuyerChatPage />} />
           
           {/* Seller Feature Routes */}
           <Route path="/dashboard/seller/products" element={<SellerProductsPage />} />
           <Route path="/dashboard/seller/analytics" element={<SellerAnalyticsPage />} />
           <Route path="/dashboard/seller/orders" element={<SellerOrdersPage />} />
           <Route path="/dashboard/seller/payments" element={<SellerPaymentsPage />} />
+          <Route path="/dashboard/seller/chat" element={<SellerChatPage />} />
           
           {/* Middleman Feature Routes */}
           <Route path="/dashboard/middleman/transactions" element={<MiddlemanTransactionsPage />} />
