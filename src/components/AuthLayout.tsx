@@ -37,13 +37,13 @@ export function AuthLayout({
       
       {/* Main content */}
       <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-500 h-2"></div>
-          <div className="p-8">
-            <div className="flex flex-col gap-6">
+        <div className="w-full max-w-xl bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-500 h-3"></div>
+          <div className="p-10">
+            <div className="flex flex-col gap-7">
               <div className="flex flex-col gap-2 animate-fade-in">
-                <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-                {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+                <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+                {subtitle && <p className="text-base text-muted-foreground">{subtitle}</p>}
               </div>
               
               <div className="animate-fade-in">
@@ -53,7 +53,7 @@ export function AuthLayout({
               {showBackLink && (
                 <Link 
                   to={backLinkUrl} 
-                  className="flex items-center text-sm text-muted-foreground hover:text-blue-600 gap-1 transition-colors animate-fade-in"
+                  className="flex items-center text-sm text-muted-foreground hover:text-blue-600 gap-1 transition-colors animate-fade-in mt-2"
                 >
                   <ArrowLeft className="h-3 w-3" />
                   <span>{backLinkText}</span>

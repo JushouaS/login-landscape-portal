@@ -24,51 +24,51 @@ const LoginPage = () => {
         subtitle="Welcome back! Please select your account type."
         className="bg-gradient-to-r from-blue-50 to-indigo-50"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 max-w-3xl mx-auto">
           <Link to="/login/buyer" className="hover:scale-105 transition-transform duration-200">
             <Card className="overflow-hidden border-2 border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all h-full">
-              <div className="bg-blue-100 p-4 flex justify-center">
-                <div className="bg-blue-500 text-white rounded-full p-3">
-                  <ShoppingBag size={32} />
+              <div className="bg-blue-100 p-6 flex justify-center">
+                <div className="bg-blue-500 text-white rounded-full p-4">
+                  <ShoppingBag size={38} />
                 </div>
               </div>
-              <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-blue-600 mb-1">Buyer</h3>
-                <p className="text-sm text-gray-600">Access your buyer account</p>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-2xl font-semibold text-blue-600 mb-2">Buyer</h3>
+                <p className="text-base text-gray-600">Access your buyer account</p>
               </CardContent>
             </Card>
           </Link>
           
           <Link to="/login/seller" className="hover:scale-105 transition-transform duration-200">
             <Card className="overflow-hidden border-2 border-green-200 hover:border-green-400 hover:shadow-lg transition-all h-full">
-              <div className="bg-green-100 p-4 flex justify-center">
-                <div className="bg-green-500 text-white rounded-full p-3">
-                  <Store size={32} />
+              <div className="bg-green-100 p-6 flex justify-center">
+                <div className="bg-green-500 text-white rounded-full p-4">
+                  <Store size={38} />
                 </div>
               </div>
-              <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-green-600 mb-1">Seller</h3>
-                <p className="text-sm text-gray-600">Access your seller dashboard</p>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-2xl font-semibold text-green-600 mb-2">Seller</h3>
+                <p className="text-base text-gray-600">Access your seller dashboard</p>
               </CardContent>
             </Card>
           </Link>
           
           <Link to="/login/middleman" className="hover:scale-105 transition-transform duration-200">
             <Card className="overflow-hidden border-2 border-purple-200 hover:border-purple-400 hover:shadow-lg transition-all h-full">
-              <div className="bg-purple-100 p-4 flex justify-center">
-                <div className="bg-purple-500 text-white rounded-full p-3">
-                  <UserCheck size={32} />
+              <div className="bg-purple-100 p-6 flex justify-center">
+                <div className="bg-purple-500 text-white rounded-full p-4">
+                  <UserCheck size={38} />
                 </div>
               </div>
-              <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-purple-600 mb-1 w-full">Middleman</h3>
-                <p className="text-sm text-gray-600">Access your middleman account</p>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-2xl font-semibold text-purple-600 mb-2 w-full">Middleman</h3>
+                <p className="text-base text-gray-600">Access your middleman account</p>
               </CardContent>
             </Card>
           </Link>
         </div>
         
-        <div className="mt-8 text-center text-gray-500 text-sm">
+        <div className="mt-10 text-center text-gray-500 text-base">
           Don't have an account?{" "}
           <Link to="/signup" className="text-blue-600 hover:underline">
             Sign up
@@ -76,13 +76,13 @@ const LoginPage = () => {
         </div>
 
         <div className="mt-4 text-center">
-          <Link to="/login/admin" className="text-xs text-gray-500 hover:underline">
+          <Link to="/login/admin" className="text-sm text-gray-500 hover:underline">
             Admin Login
           </Link>
         </div>
 
-        <footer className="mt-10 text-center text-xs text-gray-500">
-          <div className="flex justify-center space-x-4 mb-2">
+        <footer className="mt-10 text-center text-sm text-gray-500">
+          <div className="flex justify-center flex-wrap space-x-4 mb-2">
             <Link to="/about" className="hover:text-blue-600">About Us</Link>
             <Link to="/careers" className="hover:text-blue-600">Careers</Link>
             <Link to="/blog" className="hover:text-blue-600">Blog</Link>
@@ -106,7 +106,7 @@ const LoginPage = () => {
     >
       <AuthForm type="login" role={role as "buyer" | "seller" | "middleman" | "admin"} />
       {role !== "admin" && (
-        <p className="text-center text-sm">
+        <p className="text-center text-base mt-6">
           Don't have an account?{" "}
           <Link to={`/signup/${role}`} className="text-primary hover:underline">
             Sign up
@@ -114,7 +114,7 @@ const LoginPage = () => {
         </p>
       )}
 
-      <footer className="mt-10 text-center text-xs text-gray-500">
+      <footer className="mt-10 text-center text-sm text-gray-500">
         <div className="flex justify-center flex-wrap space-x-4 mb-2">
           <Link to="/about" className="hover:text-blue-600">About Us</Link>
           <Link to="/careers" className="hover:text-blue-600">Careers</Link>

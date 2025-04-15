@@ -1,4 +1,5 @@
 
+
 export interface Middleman {
   id: string;
   name: string;
@@ -40,7 +41,7 @@ export interface PendingTransaction {
   sellerName: string;
   middlemanName?: string;
   item: string;
-  price: string;
+  price: string; // This represents price in Philippine Pesos (₱)
   date: string;
   status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
 }

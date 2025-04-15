@@ -50,51 +50,51 @@ const SignupPage = () => {
         subtitle="Select your role to create an account"
         className="bg-gradient-to-r from-blue-50 to-indigo-50"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 max-w-3xl mx-auto">
           <div className="hover:scale-105 transition-transform duration-200 cursor-pointer" onClick={() => handleRoleSelect("buyer")}>
             <Card className="overflow-hidden border-2 border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all h-full">
-              <div className="bg-blue-100 p-4 flex justify-center">
-                <div className="bg-blue-500 text-white rounded-full p-3">
-                  <ShoppingBag size={32} />
+              <div className="bg-blue-100 p-6 flex justify-center">
+                <div className="bg-blue-500 text-white rounded-full p-4">
+                  <ShoppingBag size={38} />
                 </div>
               </div>
-              <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-blue-600 mb-1">Buyer</h3>
-                <p className="text-sm text-gray-600">Find trusted middlemen to help with your purchases</p>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-2xl font-semibold text-blue-600 mb-2">Buyer</h3>
+                <p className="text-base text-gray-600">Find trusted middlemen to help with your purchases</p>
               </CardContent>
             </Card>
           </div>
           
           <div className="hover:scale-105 transition-transform duration-200 cursor-pointer" onClick={() => handleRoleSelect("seller")}>
             <Card className="overflow-hidden border-2 border-green-200 hover:border-green-400 hover:shadow-lg transition-all h-full">
-              <div className="bg-green-100 p-4 flex justify-center">
-                <div className="bg-green-500 text-white rounded-full p-3">
-                  <Store size={32} />
+              <div className="bg-green-100 p-6 flex justify-center">
+                <div className="bg-green-500 text-white rounded-full p-4">
+                  <Store size={38} />
                 </div>
               </div>
-              <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-green-600 mb-1">Seller</h3>
-                <p className="text-sm text-gray-600">Sell your products with secure transaction support</p>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-2xl font-semibold text-green-600 mb-2">Seller</h3>
+                <p className="text-base text-gray-600">Sell your products with secure transaction support</p>
               </CardContent>
             </Card>
           </div>
           
           <div className="hover:scale-105 transition-transform duration-200 cursor-pointer" onClick={() => handleRoleSelect("middleman")}>
             <Card className="overflow-hidden border-2 border-purple-200 hover:border-purple-400 hover:shadow-lg transition-all h-full">
-              <div className="bg-purple-100 p-4 flex justify-center">
-                <div className="bg-purple-500 text-white rounded-full p-3">
-                  <UserCheck size={32} />
+              <div className="bg-purple-100 p-6 flex justify-center">
+                <div className="bg-purple-500 text-white rounded-full p-4">
+                  <UserCheck size={38} />
                 </div>
               </div>
-              <CardContent className="p-4 text-center">
-                <h3 className="text-xl font-semibold text-purple-600 mb-1 w-full">Middleman</h3>
-                <p className="text-sm text-gray-600">Facilitate safe exchanges between buyers and sellers</p>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-2xl font-semibold text-purple-600 mb-2 w-full">Middleman</h3>
+                <p className="text-base text-gray-600">Facilitate safe exchanges between buyers and sellers</p>
               </CardContent>
             </Card>
           </div>
         </div>
         
-        <div className="mt-8 text-center text-gray-500 text-sm">
+        <div className="mt-10 text-center text-gray-500 text-base">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-600 hover:underline">
             Login
@@ -102,15 +102,15 @@ const SignupPage = () => {
         </div>
 
         <Dialog open={showTerms} onOpenChange={setShowTerms}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>Terms of Service</DialogTitle>
               <DialogDescription>
                 Please read and accept our terms of service before continuing
               </DialogDescription>
             </DialogHeader>
-            <ScrollArea className="h-[50vh]">
-              <div className="p-4 space-y-4">
+            <ScrollArea className="h-[60vh]">
+              <div className="p-5 space-y-5">
                 <h3 className="font-semibold text-lg">1. Introduction</h3>
                 <p className="text-sm text-gray-700">
                   Welcome to Sellmate ("Company", "we", "our", "us"). These Terms of Service ("Terms", "Terms of Service") govern your use of our website located at sellmate.com (together or individually "Service") operated by Sellmate.
@@ -128,7 +128,7 @@ const SignupPage = () => {
                 
                 <h3 className="font-semibold text-lg">4. Fees and Payment</h3>
                 <p className="text-sm text-gray-700">
-                  Sellmate charges a service fee for transactions facilitated through our platform. The fee structure is clearly displayed before you confirm a transaction.
+                  Sellmate charges a service fee for transactions facilitated through our platform. The fee structure is clearly displayed before you confirm a transaction. All payments are in Philippine Pesos (₱).
                 </p>
                 
                 <h3 className="font-semibold text-lg">5. Prohibited Uses</h3>
@@ -150,6 +150,11 @@ const SignupPage = () => {
                 <p className="text-sm text-gray-700">
                   We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect.
                 </p>
+
+                <h3 className="font-semibold text-lg">9. Currency</h3>
+                <p className="text-sm text-gray-700">
+                  All monetary transactions and price displays on Sellmate are in Philippine Pesos (₱).
+                </p>
               </div>
             </ScrollArea>
             <DialogFooter className="flex items-center justify-between">
@@ -169,6 +174,7 @@ const SignupPage = () => {
               <Button 
                 onClick={handleAcceptTerms} 
                 disabled={!termsAccepted}
+                className="text-base py-2 px-6"
               >
                 Continue
               </Button>
@@ -176,7 +182,7 @@ const SignupPage = () => {
           </DialogContent>
         </Dialog>
 
-        <footer className="mt-10 text-center text-xs text-gray-500">
+        <footer className="mt-10 text-center text-sm text-gray-500">
           <div className="flex justify-center flex-wrap space-x-4 mb-2">
             <Link to="/about" className="hover:text-blue-600">About Us</Link>
             <Link to="/careers" className="hover:text-blue-600">Careers</Link>
@@ -200,14 +206,14 @@ const SignupPage = () => {
       className="bg-gradient-to-r from-blue-50 to-indigo-50"
     >
       <AuthForm type="signup" role={role as "buyer" | "seller" | "middleman"} />
-      <p className="text-center text-sm">
+      <p className="text-center text-base mt-6">
         Already have an account?{" "}
         <Link to={`/login/${role}`} className="text-blue-600 hover:underline">
           Login
         </Link>
       </p>
 
-      <footer className="mt-10 text-center text-xs text-gray-500">
+      <footer className="mt-10 text-center text-sm text-gray-500">
         <div className="flex justify-center flex-wrap space-x-4 mb-2">
           <Link to="/about" className="hover:text-blue-600">About Us</Link>
           <Link to="/careers" className="hover:text-blue-600">Careers</Link>

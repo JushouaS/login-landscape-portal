@@ -153,36 +153,38 @@ export function AuthForm({ type, role }: AuthFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {type === "signup" && (
-        <div className="space-y-2">
-          <Label htmlFor="name">Full Name</Label>
+        <div className="space-y-3">
+          <Label htmlFor="name" className="text-base">Full Name</Label>
           <Input
             id="name"
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="h-12 text-base px-4"
           />
         </div>
       )}
       
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+      <div className="space-y-3">
+        <Label htmlFor="email" className="text-base">Email</Label>
         <Input
           id="email"
           type="email"
           placeholder="name@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="h-12 text-base px-4"
           required
         />
       </div>
       
-      <div className="space-y-2">
+      <div className="space-y-3">
         <div className="flex justify-between items-center">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-base">Password</Label>
           {type === "login" && (
-            <a href="#" className="text-xs text-primary hover:underline" onClick={(e) => {
+            <a href="#" className="text-sm text-primary hover:underline" onClick={(e) => {
               e.preventDefault();
               toast.info("Password reset link sent to your email");
             }}>
@@ -197,63 +199,64 @@ export function AuthForm({ type, role }: AuthFormProps) {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="h-12 text-base px-4"
             required
           />
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-0 h-full px-3"
+            className="absolute right-0 top-0 h-full px-4"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <EyeOff className="h-4 w-4" />
+              <EyeOff className="h-5 w-5" />
             ) : (
-              <Eye className="h-4 w-4" />
+              <Eye className="h-5 w-5" />
             )}
           </Button>
         </div>
 
         {type === "signup" && (
-          <div className="mt-2 space-y-2">
-            <div className="space-y-1">
-              <Progress value={passwordStrength} className={getPasswordStrengthColor()} />
-              <p className="text-xs text-gray-500">Password strength: {passwordStrength < 40 ? 'Weak' : passwordStrength < 60 ? 'Fair' : passwordStrength < 80 ? 'Good' : 'Strong'}</p>
+          <div className="mt-3 space-y-3">
+            <div className="space-y-2">
+              <Progress value={passwordStrength} className={`h-2 ${getPasswordStrengthColor()}`} />
+              <p className="text-sm text-gray-500">Password strength: {passwordStrength < 40 ? 'Weak' : passwordStrength < 60 ? 'Fair' : passwordStrength < 80 ? 'Good' : 'Strong'}</p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-              <div className="flex items-center gap-1 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+              <div className="flex items-center gap-2 text-sm">
                 {passwordValidations.length ? 
-                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
-                  <XCircle className="h-3 w-3 text-red-500" />}
+                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
+                  <XCircle className="h-4 w-4 text-red-500" />}
                 <span>At least 8 characters</span>
               </div>
               
-              <div className="flex items-center gap-1 text-xs">
+              <div className="flex items-center gap-2 text-sm">
                 {passwordValidations.uppercase ? 
-                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
-                  <XCircle className="h-3 w-3 text-red-500" />}
+                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
+                  <XCircle className="h-4 w-4 text-red-500" />}
                 <span>Uppercase letter</span>
               </div>
               
-              <div className="flex items-center gap-1 text-xs">
+              <div className="flex items-center gap-2 text-sm">
                 {passwordValidations.lowercase ? 
-                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
-                  <XCircle className="h-3 w-3 text-red-500" />}
+                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
+                  <XCircle className="h-4 w-4 text-red-500" />}
                 <span>Lowercase letter</span>
               </div>
               
-              <div className="flex items-center gap-1 text-xs">
+              <div className="flex items-center gap-2 text-sm">
                 {passwordValidations.number ? 
-                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
-                  <XCircle className="h-3 w-3 text-red-500" />}
+                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
+                  <XCircle className="h-4 w-4 text-red-500" />}
                 <span>At least 1 number</span>
               </div>
               
-              <div className="flex items-center gap-1 text-xs">
+              <div className="flex items-center gap-2 text-sm">
                 {passwordValidations.special ? 
-                  <CheckCircle2 className="h-3 w-3 text-green-500" /> : 
-                  <XCircle className="h-3 w-3 text-red-500" />}
+                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
+                  <XCircle className="h-4 w-4 text-red-500" />}
                 <span>Special character</span>
               </div>
             </div>
@@ -263,8 +266,8 @@ export function AuthForm({ type, role }: AuthFormProps) {
       
       {type === "signup" && (
         <>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <div className="space-y-3">
+            <Label htmlFor="confirmPassword" className="text-base">Confirm Password</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
@@ -272,27 +275,28 @@ export function AuthForm({ type, role }: AuthFormProps) {
                 placeholder="Confirm your password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-12 text-base px-4"
                 required
               />
             </div>
           </div>
 
           {role === "middleman" && (
-            <div className="space-y-2">
-              <Label htmlFor="idDocument">Valid ID Document</Label>
-              <div className="border border-input rounded-md p-2">
-                <div className="flex items-center gap-2">
+            <div className="space-y-3">
+              <Label htmlFor="idDocument" className="text-base">Valid ID Document</Label>
+              <div className="border border-input rounded-md p-4">
+                <div className="flex items-center gap-3">
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full"
+                    className="w-full h-12 text-base"
                     onClick={() => document.getElementById("idDocument")?.click()}
                   >
-                    <Upload className="h-4 w-4 mr-2" />
+                    <Upload className="h-5 w-5 mr-2" />
                     {idDocument ? 'Change File' : 'Upload ID'}
                   </Button>
                   {idDocument && (
-                    <span className="text-xs text-gray-500 truncate max-w-[150px]">
+                    <span className="text-sm text-gray-500 truncate max-w-[200px]">
                       {idDocument.name}
                     </span>
                   )}
@@ -304,7 +308,7 @@ export function AuthForm({ type, role }: AuthFormProps) {
                   className="hidden"
                   onChange={handleFileChange}
                 />
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-sm text-gray-500 mt-3">
                   Please upload a valid government-issued ID (passport, driver's license, national ID card)
                 </p>
               </div>
@@ -315,7 +319,7 @@ export function AuthForm({ type, role }: AuthFormProps) {
       
       <Button
         type="submit"
-        className="w-full"
+        className="w-full h-12 text-base font-semibold"
         disabled={isLoading}
       >
         {isLoading ? "Processing..." : type === "login" ? "Login" : "Create Account"}

@@ -79,7 +79,7 @@
 }
 
 .auth-form-container {
-  @apply w-full max-w-md mx-auto p-8 rounded-lg shadow-lg bg-white border border-gray-100;
+  @apply w-full max-w-xl mx-auto p-10 rounded-lg shadow-xl bg-white border border-gray-100;
 }
 
 .gradient-background {
