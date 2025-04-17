@@ -1,8 +1,19 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, ArrowLeft, Users, ShoppingBag, UserCheck, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
+import { 
+  Shield, 
+  ArrowLeft, 
+  Users, 
+  ShoppingBag, 
+  UserCheck, 
+  CheckCircle, 
+  AlertTriangle, 
+  XCircle,
+  Info
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { 
   BarChart, 
@@ -17,9 +28,29 @@ import {
   Cell,
   Legend
 } from 'recharts';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+
+type AlertStatus = 'normal' | 'warning' | 'critical';
+
+interface SystemAlert {
+  id: string;
+  title: string;
+  status: AlertStatus;
+  message: string;
+  details?: string;
+  timestamp?: string;
+  affectedSystems?: string[];
+}
 
 const OverviewPage = () => {
   const navigate = useNavigate();
+  const [selectedAlert, setSelectedAlert] = useState<SystemAlert | null>(null);
 
   const handleGoBack = () => {
     navigate('/dashboard/admin');
@@ -53,36 +84,48 @@ const OverviewPage = () => {
 
   const COLORS = ['#3b82f6', '#10b981', '#a855f7', '#ef4444'];
 
-  // Data for system alerts with properly typed status
-  const systemAlerts = [
+  // Data for system alerts with properly typed status and additional details
+  const systemAlerts: SystemAlert[] = [
     {
       id: '1',
       title: 'Server Performance',
-      status: 'normal' as const,
-      message: 'All systems operating normally'
+      status: 'normal',
+      message: 'All systems operating normally',
+      details: 'All server metrics are within normal operating parameters. CPU usage is at 35%, memory usage at 42%, and network bandwidth is optimal. Last maintenance performed on April 15, 2025.',
+      timestamp: '2025-04-17T07:30:00Z',
+      affectedSystems: ['Web Servers', 'Database Servers']
     },
     {
       id: '2',
       title: 'Database Backup',
-      status: 'warning' as const,
-      message: 'Last backup completed 48 hours ago'
+      status: 'warning',
+      message: 'Last backup completed 48 hours ago',
+      details: 'Database backup schedule has been interrupted. The last successful backup was completed 48 hours ago, exceeding the standard 24-hour backup policy. The backup service is running but encountered permission issues when accessing the storage volume.',
+      timestamp: '2025-04-16T22:15:00Z',
+      affectedSystems: ['Database Backup Service', 'Storage Volume B']
     },
     {
       id: '3',
       title: 'Payment Gateway',
-      status: 'normal' as const,
-      message: 'Processing transactions normally'
+      status: 'normal',
+      message: 'Processing transactions normally',
+      details: 'Payment gateway is operating at full capacity. Transaction processing times average 1.2 seconds, with a 99.98% success rate over the past 24 hours. No failed transactions have been reported by monitoring systems.',
+      timestamp: '2025-04-17T08:45:00Z',
+      affectedSystems: ['Payment Processing', 'Transaction Logging']
     },
     {
       id: '4',
       title: 'Security Scan',
-      status: 'critical' as const,
-      message: 'Scheduled security scan skipped'
+      status: 'critical',
+      message: 'Scheduled security scan skipped',
+      details: 'The automated security scanning service failed to run its scheduled scan. This is the second consecutive missed scan, which may indicate configuration issues with the security scanning service. Manual intervention is required to diagnose and resolve the underlying issue.',
+      timestamp: '2025-04-15T03:20:00Z',
+      affectedSystems: ['Security Scanning Service', 'Vulnerability Management']
     }
   ];
 
   // Properly typed function for alert status icons
-  const getAlertStatusIcon = (status: 'normal' | 'warning' | 'critical') => {
+  const getAlertStatusIcon = (status: AlertStatus) => {
     switch (status) {
       case 'normal':
         return <CheckCircle className="h-5 w-5 text-green-500" />;
@@ -92,6 +135,23 @@ const OverviewPage = () => {
         return <XCircle className="h-5 w-5 text-red-500" />;
       default:
         return null;
+    }
+  };
+
+  const handleViewDetails = (alert: SystemAlert) => {
+    setSelectedAlert(alert);
+  };
+
+  const getStatusColorClass = (status: AlertStatus) => {
+    switch (status) {
+      case 'normal':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'warning':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'critical':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -263,7 +323,13 @@ const OverviewPage = () => {
                         <p className="text-sm text-gray-600">{alert.message}</p>
                       </div>
                       <div className="ml-auto">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleViewDetails(alert)}
+                          className="flex items-center gap-1"
+                        >
+                          <Info className="h-4 w-4" />
                           View Details
                         </Button>
                       </div>
@@ -278,6 +344,56 @@ const OverviewPage = () => {
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
         &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
       </footer>
+
+      {/* Alert Details Dialog */}
+      <Dialog open={!!selectedAlert} onOpenChange={() => setSelectedAlert(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {selectedAlert && (
+                <>
+                  {getAlertStatusIcon(selectedAlert.status)}
+                  {selectedAlert.title}
+                </>
+              )}
+            </DialogTitle>
+            <DialogDescription>
+              {selectedAlert?.message}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {selectedAlert && (
+              <>
+                <div className={`p-4 rounded-md border ${getStatusColorClass(selectedAlert.status)}`}>
+                  <div className="font-medium mb-2">Status: {selectedAlert.status.charAt(0).toUpperCase() + selectedAlert.status.slice(1)}</div>
+                  <p className="text-sm">{selectedAlert.details}</p>
+                </div>
+                
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">Affected Systems</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedAlert.affectedSystems?.map((system, index) => (
+                      <span 
+                        key={index} 
+                        className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                      >
+                        {system}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-sm font-semibold mb-1">Last Updated</h4>
+                  <p className="text-xs text-gray-600">
+                    {selectedAlert.timestamp ? new Date(selectedAlert.timestamp).toLocaleString() : 'Unknown'}
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
