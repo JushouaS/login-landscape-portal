@@ -16,6 +16,19 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption } from "@/components/ui/table";
 
 interface User {
   id: string;
@@ -27,6 +40,17 @@ interface User {
   lastActive: string;
   verified: boolean;
 }
+
+const editUserSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  role: z.enum(['buyer', 'seller', 'middleman', 'admin'], {
+    required_error: "Please select a role.",
+  }),
+  status: z.enum(['active', 'suspended', 'pending'], {
+    required_error: "Please select a status.",
+  }),
+});
 
 const UsersPage = () => {
   const navigate = useNavigate();
@@ -110,6 +134,16 @@ const UsersPage = () => {
     }
   ]);
 
+  const form = useForm<z.infer<typeof editUserSchema>>({
+    resolver: zodResolver(editUserSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      role: "buyer",
+      status: "active",
+    },
+  });
+
   const handleGoBack = () => {
     navigate('/dashboard/admin');
   };
@@ -120,6 +154,12 @@ const UsersPage = () => {
 
   const handleEditUser = (user: User) => {
     setSelectedUser(user);
+    form.reset({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+    });
     setShowEditDialog(true);
   };
 
@@ -181,6 +221,29 @@ const UsersPage = () => {
         title: "User Deleted",
         description: `${selectedUser.name} has been removed from the system.`,
         variant: "destructive"
+      });
+    }
+  };
+
+  const handleEditSubmit = (values: z.infer<typeof editUserSchema>) => {
+    if (selectedUser) {
+      setUsers(users.map(user => {
+        if (user.id === selectedUser.id) {
+          return {
+            ...user,
+            name: values.name,
+            email: values.email,
+            role: values.role,
+            status: values.status,
+          };
+        }
+        return user;
+      }));
+      
+      setShowEditDialog(false);
+      toast({
+        title: "User Updated",
+        description: `${values.name}'s information has been updated successfully.`,
       });
     }
   };
@@ -407,26 +470,95 @@ const UsersPage = () => {
           <DialogHeader>
             <DialogTitle>Edit User</DialogTitle>
             <DialogDescription>
-              Update user information and permissions.
+              Update information and permissions for {selectedUser?.name}
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
-            <p>Editing user: {selectedUser?.name}</p>
-            <p className="text-sm text-muted-foreground">
-              This dialog is a placeholder. In a complete implementation, you would add form fields here.
-            </p>
-          </div>
-          <DialogFooter>
-            <Button onClick={() => {
-              setShowEditDialog(false);
-              toast({
-                title: "User Updated",
-                description: "User information has been updated successfully."
-              });
-            }}>
-              Save Changes
-            </Button>
-          </DialogFooter>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleEditSubmit)} className="space-y-4 py-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="User name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Email address" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                      value={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="buyer">Buyer</SelectItem>
+                        <SelectItem value="seller">Seller</SelectItem>
+                        <SelectItem value="middleman">Middleman</SelectItem>
+                        <SelectItem value="admin">Admin</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                      value={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="suspended">Suspended</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <DialogFooter>
+                <Button type="submit">Save Changes</Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
 
@@ -481,35 +613,35 @@ const UsersTable = ({ users, getRoleBadge, getStatusBadge, getStatusActions, onE
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b text-sm text-gray-500">
-            <th className="text-left py-3 px-4">Name</th>
-            <th className="text-left py-3 px-4">Email</th>
-            <th className="text-left py-3 px-4">Role</th>
-            <th className="text-left py-3 px-4">Status</th>
-            <th className="text-left py-3 px-4">Registered On</th>
-            <th className="text-left py-3 px-4">Last Active</th>
-            <th className="text-left py-3 px-4">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Registered On</TableHead>
+            <TableHead>Last Active</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {users.map((user) => (
-            <tr key={user.id} className="border-b hover:bg-gray-50">
-              <td className="py-3 px-4 font-medium">
+            <TableRow key={user.id}>
+              <TableCell className="font-medium">
                 <div className="flex items-center">
                   {user.name}
                   {user.role === 'admin' && (
                     <Shield className="h-4 w-4 text-red-500 ml-2" />
                   )}
                 </div>
-              </td>
-              <td className="py-3 px-4 text-gray-600">{user.email}</td>
-              <td className="py-3 px-4">{getRoleBadge(user.role)}</td>
-              <td className="py-3 px-4">{getStatusBadge(user.status)}</td>
-              <td className="py-3 px-4 text-gray-600">{new Date(user.registeredOn).toLocaleDateString()}</td>
-              <td className="py-3 px-4 text-gray-600">{new Date(user.lastActive).toLocaleDateString()}</td>
-              <td className="py-3 px-4">
+              </TableCell>
+              <TableCell className="text-gray-600">{user.email}</TableCell>
+              <TableCell>{getRoleBadge(user.role)}</TableCell>
+              <TableCell>{getStatusBadge(user.status)}</TableCell>
+              <TableCell className="text-gray-600">{new Date(user.registeredOn).toLocaleDateString()}</TableCell>
+              <TableCell className="text-gray-600">{new Date(user.lastActive).toLocaleDateString()}</TableCell>
+              <TableCell>
                 <div className="flex gap-2">
                   {getStatusActions(user)}
                   <Button 
@@ -530,11 +662,11 @@ const UsersTable = ({ users, getRoleBadge, getStatusBadge, getStatusActions, onE
                     </Button>
                   )}
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };
