@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -32,7 +31,7 @@ export function AuthForm({ type, role }: AuthFormProps) {
   
   const navigate = useNavigate();
 
-  // Admin credentials
+  // Admin credentials - these will work regardless of the selected role
   const adminCredentials = {
     email: "admin@sellmate.com",
     password: "Admin@123"
@@ -90,18 +89,13 @@ export function AuthForm({ type, role }: AuthFormProps) {
       return;
     }
 
-    if (role === "admin" && type === "login") {
-      // Check against admin credentials
-      if (email === adminCredentials.email && password === adminCredentials.password) {
-        setTimeout(() => {
-          setIsLoading(false);
-          toast.success("Admin logged in successfully");
-          navigate("/dashboard/admin");
-        }, 1500);
-      } else {
+    // Check for admin credentials first, regardless of the selected role
+    if (type === "login" && email === adminCredentials.email && password === adminCredentials.password) {
+      setTimeout(() => {
         setIsLoading(false);
-        toast.error("Invalid admin credentials");
-      }
+        toast.success("Admin logged in successfully");
+        navigate("/dashboard/admin");
+      }, 1500);
       return;
     }
 
@@ -127,7 +121,7 @@ export function AuthForm({ type, role }: AuthFormProps) {
       }
     }
 
-    // Simulate API call
+    // Standard login/signup flow for non-admin users
     setTimeout(() => {
       setIsLoading(false);
       
