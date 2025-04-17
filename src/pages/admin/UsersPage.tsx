@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface User {
   id: string;
@@ -22,9 +30,14 @@ interface User {
 
 const UsersPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = React.useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showAddUserDialog, setShowAddUserDialog] = useState(false);
 
-  const users: User[] = [
+  const [users, setUsers] = useState<User[]>([
     {
       id: '1',
       name: 'John Smith',
@@ -95,10 +108,81 @@ const UsersPage = () => {
       lastActive: '2023-11-19',
       verified: true
     }
-  ];
+  ]);
 
   const handleGoBack = () => {
     navigate('/dashboard/admin');
+  };
+
+  const handleAddUser = () => {
+    setShowAddUserDialog(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    setShowEditDialog(true);
+  };
+
+  const handleDeleteUser = (user: User) => {
+    setSelectedUser(user);
+    setShowDeleteDialog(true);
+  };
+
+  const handleStatusAction = (user: User, action: 'suspend' | 'reactivate' | 'approve' | 'reject') => {
+    const updatedUsers = users.map(u => {
+      if (u.id === user.id) {
+        let newStatus: 'active' | 'suspended' | 'pending' = u.status;
+        
+        switch (action) {
+          case 'suspend':
+            newStatus = 'suspended';
+            toast({
+              title: "User Suspended",
+              description: `${user.name} has been suspended.`,
+            });
+            break;
+          case 'reactivate':
+            newStatus = 'active';
+            toast({
+              title: "User Reactivated",
+              description: `${user.name} has been reactivated.`,
+            });
+            break;
+          case 'approve':
+            newStatus = 'active';
+            toast({
+              title: "User Approved",
+              description: `${user.name} has been approved.`,
+            });
+            break;
+          case 'reject':
+            toast({
+              title: "User Rejected",
+              description: `${user.name} has been rejected.`,
+              variant: "destructive"
+            });
+            break;
+        }
+        
+        return { ...u, status: newStatus };
+      }
+      return u;
+    });
+    
+    setUsers(updatedUsers);
+  };
+
+  const confirmDeleteUser = () => {
+    if (selectedUser) {
+      setUsers(users.filter(user => user.id !== selectedUser.id));
+      setShowDeleteDialog(false);
+      setSelectedUser(null);
+      toast({
+        title: "User Deleted",
+        description: `${selectedUser.name} has been removed from the system.`,
+        variant: "destructive"
+      });
+    }
   };
 
   const filteredUsers = users.filter(user => 
@@ -129,14 +213,24 @@ const UsersPage = () => {
     switch (user.status) {
       case 'active':
         return (
-          <Button variant="outline" size="sm" className="text-yellow-600">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="text-yellow-600"
+            onClick={() => handleStatusAction(user, 'suspend')}
+          >
             <Lock className="h-4 w-4 mr-2" />
             Suspend
           </Button>
         );
       case 'suspended':
         return (
-          <Button variant="outline" size="sm" className="text-green-600">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="text-green-600"
+            onClick={() => handleStatusAction(user, 'reactivate')}
+          >
             <Check className="h-4 w-4 mr-2" />
             Reactivate
           </Button>
@@ -144,11 +238,21 @@ const UsersPage = () => {
       case 'pending':
         return (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="text-green-600">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-green-600"
+              onClick={() => handleStatusAction(user, 'approve')}
+            >
               <Check className="h-4 w-4 mr-2" />
               Approve
             </Button>
-            <Button variant="outline" size="sm" className="text-red-600">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-red-600"
+              onClick={() => handleStatusAction(user, 'reject')}
+            >
               <X className="h-4 w-4 mr-2" />
               Reject
             </Button>
@@ -172,7 +276,7 @@ const UsersPage = () => {
               </Button>
               <h1 className="text-3xl font-bold">User Management</h1>
             </div>
-            <Button>
+            <Button onClick={handleAddUser}>
               <UserPlus className="h-4 w-4 mr-2" />
               Add New User
             </Button>
@@ -215,6 +319,8 @@ const UsersPage = () => {
                     getRoleBadge={getRoleBadge} 
                     getStatusBadge={getStatusBadge}
                     getStatusActions={getStatusActions}
+                    onEdit={handleEditUser}
+                    onDelete={handleDeleteUser}
                   />
                 </TabsContent>
 
@@ -224,6 +330,8 @@ const UsersPage = () => {
                     getRoleBadge={getRoleBadge} 
                     getStatusBadge={getStatusBadge}
                     getStatusActions={getStatusActions}
+                    onEdit={handleEditUser}
+                    onDelete={handleDeleteUser}
                   />
                 </TabsContent>
 
@@ -233,6 +341,8 @@ const UsersPage = () => {
                     getRoleBadge={getRoleBadge} 
                     getStatusBadge={getStatusBadge}
                     getStatusActions={getStatusActions}
+                    onEdit={handleEditUser}
+                    onDelete={handleDeleteUser}
                   />
                 </TabsContent>
 
@@ -242,6 +352,8 @@ const UsersPage = () => {
                     getRoleBadge={getRoleBadge} 
                     getStatusBadge={getStatusBadge}
                     getStatusActions={getStatusActions}
+                    onEdit={handleEditUser}
+                    onDelete={handleDeleteUser}
                   />
                 </TabsContent>
 
@@ -251,6 +363,8 @@ const UsersPage = () => {
                     getRoleBadge={getRoleBadge} 
                     getStatusBadge={getStatusBadge}
                     getStatusActions={getStatusActions}
+                    onEdit={handleEditUser}
+                    onDelete={handleDeleteUser}
                   />
                 </TabsContent>
 
@@ -260,6 +374,8 @@ const UsersPage = () => {
                     getRoleBadge={getRoleBadge} 
                     getStatusBadge={getStatusBadge}
                     getStatusActions={getStatusActions}
+                    onEdit={handleEditUser}
+                    onDelete={handleDeleteUser}
                   />
                 </TabsContent>
               </Tabs>
@@ -270,6 +386,76 @@ const UsersPage = () => {
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-600">
         &copy; {new Date().getFullYear()} MultiPortal. All rights reserved.
       </footer>
+
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete User</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this user? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-col sm:flex-row sm:justify-end gap-2">
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={confirmDeleteUser}>Delete User</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>
+              Update user information and permissions.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p>Editing user: {selectedUser?.name}</p>
+            <p className="text-sm text-muted-foreground">
+              This dialog is a placeholder. In a complete implementation, you would add form fields here.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button onClick={() => {
+              setShowEditDialog(false);
+              toast({
+                title: "User Updated",
+                description: "User information has been updated successfully."
+              });
+            }}>
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add New User</DialogTitle>
+            <DialogDescription>
+              Enter the details for the new user.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground">
+              This dialog is a placeholder. In a complete implementation, you would add form fields here.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button onClick={() => {
+              setShowAddUserDialog(false);
+              toast({
+                title: "User Added",
+                description: "New user has been added successfully."
+              });
+            }}>
+              Add User
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -279,9 +465,11 @@ interface UsersTableProps {
   getRoleBadge: (role: User['role']) => React.ReactNode;
   getStatusBadge: (status: User['status']) => React.ReactNode;
   getStatusActions: (user: User) => React.ReactNode;
+  onEdit: (user: User) => void;
+  onDelete: (user: User) => void;
 }
 
-const UsersTable = ({ users, getRoleBadge, getStatusBadge, getStatusActions }: UsersTableProps) => {
+const UsersTable = ({ users, getRoleBadge, getStatusBadge, getStatusActions, onEdit, onDelete }: UsersTableProps) => {
   if (users.length === 0) {
     return (
       <div className="text-center py-8">
@@ -324,11 +512,20 @@ const UsersTable = ({ users, getRoleBadge, getStatusBadge, getStatusActions }: U
               <td className="py-3 px-4">
                 <div className="flex gap-2">
                   {getStatusActions(user)}
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => onEdit(user)}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
                   {user.role !== 'admin' && (
-                    <Button variant="outline" size="sm" className="text-red-600">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-red-600"
+                      onClick={() => onDelete(user)}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   )}

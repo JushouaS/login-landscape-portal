@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { NavBar } from "@/components/NavBar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BarChart as BarChartIcon, ArrowLeft, Download, Calendar, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
 import { 
   BarChart, 
   Bar, 
@@ -26,9 +27,28 @@ import {
 
 const AnalyticsPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [timeRange, setTimeRange] = useState<'30days' | '90days' | '1year'>('30days');
 
   const handleGoBack = () => {
     navigate('/dashboard/admin');
+  };
+
+  const handleExportReport = () => {
+    // In a real application, this would trigger a report generation
+    // For now, we'll just show a toast notification
+    toast({
+      title: "Report Export Started",
+      description: "Your report is being generated and will be available for download shortly.",
+    });
+  };
+
+  const handleTimeRangeChange = (range: '30days' | '90days' | '1year') => {
+    setTimeRange(range);
+    toast({
+      title: "Time Range Updated",
+      description: `Data now showing for the last ${range === '30days' ? '30 days' : range === '90days' ? '90 days' : 'year'}.`,
+    });
   };
 
   // Data for platform overview
@@ -110,10 +130,35 @@ const AnalyticsPage = () => {
               </Button>
               <h1 className="text-3xl font-bold">System Analytics</h1>
             </div>
-            <Button>
-              <Download className="h-4 w-4 mr-2" />
-              Export Reports
-            </Button>
+            <div className="flex gap-2 items-center">
+              <div className="hidden md:flex items-center">
+                <Button 
+                  variant={timeRange === "30days" ? "default" : "outline"} 
+                  className="rounded-r-none"
+                  onClick={() => handleTimeRangeChange("30days")}
+                >
+                  30 Days
+                </Button>
+                <Button 
+                  variant={timeRange === "90days" ? "default" : "outline"} 
+                  className="rounded-none border-x-0"
+                  onClick={() => handleTimeRangeChange("90days")}
+                >
+                  90 Days
+                </Button>
+                <Button 
+                  variant={timeRange === "1year" ? "default" : "outline"} 
+                  className="rounded-l-none"
+                  onClick={() => handleTimeRangeChange("1year")}
+                >
+                  1 Year
+                </Button>
+              </div>
+              <Button onClick={handleExportReport}>
+                <Download className="h-4 w-4 mr-2" />
+                Export Reports
+              </Button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -307,7 +352,7 @@ const AnalyticsPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Key Metrics (Last 30 Days)</CardTitle>
+                <CardTitle>Key Metrics (Last {timeRange === '30days' ? '30 Days' : timeRange === '90days' ? '90 Days' : 'Year'})</CardTitle>
                 <CardDescription>
                   Important performance indicators
                 </CardDescription>
