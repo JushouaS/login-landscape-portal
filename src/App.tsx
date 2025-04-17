@@ -17,7 +17,6 @@ import NotFound from "./pages/NotFound";
 import PaymentMethodsPage from "./pages/buyer/PaymentMethodsPage";
 import BrowseMiddlemenPage from "./pages/buyer/BrowseMiddlemenPage";
 import OrdersPage from "./pages/buyer/OrdersPage";
-import WishlistPage from "./pages/buyer/WishlistPage";
 import BuyerChatPage from "./pages/buyer/ChatPage";
 
 // Seller Pages
@@ -75,7 +74,6 @@ const App = () => (
           <Route path="/dashboard/buyer/payment-methods" element={<PaymentMethodsPage />} />
           <Route path="/dashboard/buyer/middlemen" element={<BrowseMiddlemenPage />} />
           <Route path="/dashboard/buyer/orders" element={<OrdersPage />} />
-          <Route path="/dashboard/buyer/wishlist" element={<WishlistPage />} />
           <Route path="/dashboard/buyer/chat" element={<BuyerChatPage />} />
           
           {/* Seller Feature Routes */}

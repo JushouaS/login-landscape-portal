@@ -1,7 +1,7 @@
 
 import { NavBar } from "@/components/NavBar";
 import { Card } from "@/components/ui/card";
-import { ShoppingBag, Package, CreditCard, Heart, UserCheck, MessageCircle } from "lucide-react";
+import { ShoppingBag, Package, CreditCard, UserCheck, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const BuyerDashboard = () => {
@@ -25,12 +25,6 @@ const BuyerDashboard = () => {
       link: "/dashboard/buyer/payment-methods"
     },
     {
-      title: "Wishlist",
-      description: "View and manage your saved items",
-      icon: <Heart className="h-10 w-10 text-blue-500" />,
-      link: "/dashboard/buyer/wishlist"
-    },
-    {
       title: "Messages",
       description: "Chat with middlemen and sellers",
       icon: <MessageCircle className="h-10 w-10 text-blue-500" />,
@@ -45,7 +39,7 @@ const BuyerDashboard = () => {
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-8">Buyer Dashboard</h1>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {dashboardCards.map((card, index) => (
               <Link to={card.link} key={index}>
                 <Card className="dashboard-card hover:border-blue-300 transition-all hover:shadow-md cursor-pointer">
