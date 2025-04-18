@@ -1,11 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Upload, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
-import { Progress } from "@/components/ui/progress";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +14,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ForgotPasswordFlow } from "./ForgotPasswordFlow";
+import { PasswordInput } from "./auth/PasswordInput";
+import { IdDocumentUpload } from "./auth/IdDocumentUpload";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -27,7 +28,6 @@ export function AuthForm({ type, role }: AuthFormProps) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [idDocument, setIdDocument] = useState<File | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [passwordValidations, setPasswordValidations] = useState({
@@ -40,7 +40,7 @@ export function AuthForm({ type, role }: AuthFormProps) {
   
   const navigate = useNavigate();
 
-  // Admin credentials - these will work regardless of the selected role
+  // Admin credentials
   const adminCredentials = {
     email: "admin@sellmate.com",
     password: "Admin@123"
@@ -54,7 +54,6 @@ export function AuthForm({ type, role }: AuthFormProps) {
 
   useEffect(() => {
     if (password) {
-      // Check password requirements
       const validations = {
         length: password.length >= 8,
         uppercase: /[A-Z]/.test(password),
@@ -64,8 +63,6 @@ export function AuthForm({ type, role }: AuthFormProps) {
       };
       
       setPasswordValidations(validations);
-      
-      // Calculate password strength (0-100)
       const validCount = Object.values(validations).filter(Boolean).length;
       setPasswordStrength(validCount * 20);
     } else {
@@ -91,14 +88,12 @@ export function AuthForm({ type, role }: AuthFormProps) {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simple validation
     if (!email || !password) {
       toast.error("Please fill in all required fields");
       setIsLoading(false);
       return;
     }
 
-    // Check for admin credentials first, regardless of the selected role
     if (type === "login" && email === adminCredentials.email && password === adminCredentials.password) {
       setTimeout(() => {
         setIsLoading(false);
@@ -115,22 +110,19 @@ export function AuthForm({ type, role }: AuthFormProps) {
         return;
       }
       
-      // Check password strength for signup
       if (passwordStrength < 60) {
         toast.error("Password does not meet minimum security requirements");
         setIsLoading(false);
         return;
       }
 
-      // Check for ID document requirement for middleman
-      if (role === "middleman" && !idDocument && type === "signup") {
+      if (role === "middleman" && !idDocument) {
         toast.error(`Valid ID document is required for ${role} registration`);
         setIsLoading(false);
         return;
       }
     }
 
-    // Standard login/signup flow for non-admin users
     setTimeout(() => {
       setIsLoading(false);
       
@@ -142,17 +134,6 @@ export function AuthForm({ type, role }: AuthFormProps) {
       
       navigate(`/dashboard/${role}`);
     }, 1500);
-  };
-
-  const getPasswordStrengthColor = () => {
-    if (passwordStrength < 40) return "bg-red-500";
-    if (passwordStrength < 60) return "bg-yellow-500";
-    if (passwordStrength < 80) return "bg-blue-500";
-    return "bg-green-500";
-  };
-
-  const handleContactMiddleman = () => {
-    toast.success("Contact request sent to middleman. They will respond shortly.");
   };
 
   return (
@@ -205,127 +186,29 @@ export function AuthForm({ type, role }: AuthFormProps) {
             </Dialog>
           )}
         </div>
-        <div className="relative">
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-12 text-base px-4"
-            required
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="absolute right-0 top-0 h-full px-4"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? (
-              <EyeOff className="h-5 w-5" />
-            ) : (
-              <Eye className="h-5 w-5" />
-            )}
-          </Button>
-        </div>
 
-        {type === "signup" && (
-          <div className="mt-3 space-y-3">
-            <div className="space-y-2">
-              <Progress value={passwordStrength} className={`h-2 ${getPasswordStrengthColor()}`} />
-              <p className="text-sm text-gray-500">Password strength: {passwordStrength < 40 ? 'Weak' : passwordStrength < 60 ? 'Fair' : passwordStrength < 80 ? 'Good' : 'Strong'}</p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-              <div className="flex items-center gap-2 text-sm">
-                {passwordValidations.length ? 
-                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
-                  <XCircle className="h-4 w-4 text-red-500" />}
-                <span>At least 8 characters</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm">
-                {passwordValidations.uppercase ? 
-                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
-                  <XCircle className="h-4 w-4 text-red-500" />}
-                <span>Uppercase letter</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm">
-                {passwordValidations.lowercase ? 
-                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
-                  <XCircle className="h-4 w-4 text-red-500" />}
-                <span>Lowercase letter</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm">
-                {passwordValidations.number ? 
-                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
-                  <XCircle className="h-4 w-4 text-red-500" />}
-                <span>At least 1 number</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm">
-                {passwordValidations.special ? 
-                  <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
-                  <XCircle className="h-4 w-4 text-red-500" />}
-                <span>Special character</span>
-              </div>
-            </div>
-          </div>
-        )}
+        <PasswordInput
+          password={password}
+          onPasswordChange={setPassword}
+          showValidation={type === "signup"}
+          passwordStrength={passwordStrength}
+          validations={passwordValidations}
+        />
       </div>
       
       {type === "signup" && (
         <>
-          <div className="space-y-3">
-            <Label htmlFor="confirmPassword" className="text-base">Confirm Password</Label>
-            <div className="relative">
-              <Input
-                id="confirmPassword"
-                type={showPassword ? "text" : "password"}
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="h-12 text-base px-4"
-                required
-              />
-            </div>
-          </div>
+          <PasswordInput
+            password={confirmPassword}
+            onPasswordChange={setConfirmPassword}
+            label="Confirm Password"
+          />
 
           {role === "middleman" && (
-            <div className="space-y-3">
-              <Label htmlFor="idDocument" className="text-base">Valid ID Document</Label>
-              <div className="border border-input rounded-md p-4">
-                <div className="flex items-center gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full h-12 text-base"
-                    onClick={() => document.getElementById("idDocument")?.click()}
-                  >
-                    <Upload className="h-5 w-5 mr-2" />
-                    {idDocument ? 'Change File' : 'Upload ID'}
-                  </Button>
-                  {idDocument && (
-                    <span className="text-sm text-gray-500 truncate max-w-[200px]">
-                      {idDocument.name}
-                    </span>
-                  )}
-                </div>
-                <Input
-                  id="idDocument"
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-                <p className="text-sm text-gray-500 mt-3">
-                  Please upload a valid government-issued ID (passport, driver's license, national ID card)
-                </p>
-              </div>
-            </div>
+            <IdDocumentUpload
+              idDocument={idDocument}
+              onFileChange={handleFileChange}
+            />
           )}
         </>
       )}
