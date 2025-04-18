@@ -6,6 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Upload, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ForgotPasswordFlow } from "./ForgotPasswordFlow";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -178,12 +187,22 @@ export function AuthForm({ type, role }: AuthFormProps) {
         <div className="flex justify-between items-center">
           <Label htmlFor="password" className="text-base">Password</Label>
           {type === "login" && (
-            <a href="#" className="text-sm text-primary hover:underline" onClick={(e) => {
-              e.preventDefault();
-              toast.info("Password reset link sent to your email");
-            }}>
-              Forgot password?
-            </a>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="link" className="text-sm text-primary hover:underline p-0 h-auto font-normal">
+                  Forgot password?
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Reset Password</DialogTitle>
+                  <DialogDescription>
+                    Follow the steps below to reset your password securely.
+                  </DialogDescription>
+                </DialogHeader>
+                <ForgotPasswordFlow />
+              </DialogContent>
+            </Dialog>
           )}
         </div>
         <div className="relative">
