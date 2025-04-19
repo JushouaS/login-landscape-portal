@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Article } from "lucide-react";
+import { FileText } from "lucide-react";
 
 const BlogPage = () => {
   const articles = [
@@ -45,7 +45,7 @@ const BlogPage = () => {
             <Card key={index} className="border-blue-200 hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <Article className="h-5 w-5 text-blue-600" />
+                  <FileText className="h-5 w-5 text-blue-600" />
                   <CardTitle className="text-xl">{article.title}</CardTitle>
                 </div>
               </CardHeader>
