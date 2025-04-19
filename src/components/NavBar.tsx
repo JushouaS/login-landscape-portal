@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { UserCircle, Menu, X } from "lucide-react";
@@ -56,21 +55,6 @@ export function NavBar({ userType }: NavBarProps) {
 
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/about">
-              <Button variant="ghost" size="sm">
-                About Us
-              </Button>
-            </Link>
-            <Link to="/careers">
-              <Button variant="ghost" size="sm">
-                Careers
-              </Button>
-            </Link>
-            <Link to="/blog">
-              <Button variant="ghost" size="sm">
-                Blog
-              </Button>
-            </Link>
             {isLoggedIn ? (
               <>
                 <span className="text-sm capitalize">{userType} Dashboard</span>
@@ -102,15 +86,6 @@ export function NavBar({ userType }: NavBarProps) {
 
         {/* Mobile menu */}
         <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} pt-4 pb-2 space-y-2`}>
-          <Link to="/about" className="block px-2 py-1 hover:bg-gray-100 rounded">
-            About Us
-          </Link>
-          <Link to="/careers" className="block px-2 py-1 hover:bg-gray-100 rounded">
-            Careers
-          </Link>
-          <Link to="/blog" className="block px-2 py-1 hover:bg-gray-100 rounded">
-            Blog
-          </Link>
           {isLoggedIn ? (
             <>
               <p className="text-sm capitalize px-2">{userType} Dashboard</p>
